@@ -1,0 +1,53 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@google-cloud/functions-framework": "^3.4.2",
+    "@nuxt/fonts": "^0.11.4",
+    "@nuxt/image": "^1.11.0",
+    "@nuxt/ui": "^2.22.3",
+    "@nuxtjs/tailwindcss": "^6.12.1",
+    "@stripe/stripe-js": "^4.4.0",
+    "@tensorflow-models/coco-ssd": "^2.2.3",
+    "@tensorflow/tfjs": "^4.20.0",
+    "@tensorflow/tfjs-backend-cpu": "^4.20.0",
+    "@tensorflow/tfjs-backend-webgl": "^4.20.0",
+    "@tensorflow/tfjs-converter": "^4.20.0",
+    "@tensorflow/tfjs-core": "^4.20.0",
+    "@tensorflow/tfjs-node": "^4.20.0",
+    "@unlok-co/nuxt-stripe": "^3.0.0",
+    "firebase": "^12.4.0",
+    "firebase-admin": "^12.5.0",
+    "firebase-frameworks": "^0.11.4",
+    "firebase-functions": "^6.0.1",
+    "googleapis": "^144.0.0",
+    "mitt": "^3.0.1",
+    "nuxt": "^3.12.4",
+    "nuxt-storage": "^1.2.2",
+    "stripe": "^16.10.0",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^5.0.0",
+    "@iconify-json/heroicons-solid": "^1.2.0",
+    "@nuxt/test-utils": "^3.19.2",
+    "@nuxtjs/dotenv": "^1.4.2",
+    "@vue/test-utils": "^2.4.6",
+    "dotenv": "^17.2.3",
+    "eslint": "^9.11.1",
+    "flush-promises": "^1.0.2",
+    "happy-dom": "^18.0.1",
+    "playwright-core": "^1.55.0",
+    "vitest": "^3.2.4"
+  }
+}

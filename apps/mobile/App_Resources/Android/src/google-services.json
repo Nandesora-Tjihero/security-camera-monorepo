@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "234602256862",
+    "project_id": "security-camera-a413e",
+    "storage_bucket": "security-camera-a413e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:234602256862:android:5b4c1adeb8abfa726aa54f",
+        "android_client_info": {
+          "package_name": "org.nativescript.securitycameramobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDi6CsskEnFd2vNKmA1R6Aa58mLJmCm0Aw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

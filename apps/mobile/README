@@ -1,0 +1,16 @@
+# Security Camera Mobile
+
+This is a companion app to the monitoring [Security Camera](https://github.com/Ombuweb/security-camera) app. It is made with NativeScript-Vue.
+
+## Prerequisites
+
+The app uses Firebase so you need to have a Firebase created with at least an Android app registered.
+
+To run the project on your machine, follow these steps:
+
+1. If you haven't, setup your NativeScript local dev following [Local setup](https://docs.nativescript.org/setup/#local-setup) docs.
+2. Clone the repo to your machine and do this:
+
+- `cd security-camera-mobile`
+- `npm i`
+- `ns run android`, I've not test the app on iOS yet. When I do, I'll update the README.

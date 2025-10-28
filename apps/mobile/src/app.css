@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&.ns-dark, .ns-dark &);
+@custom-variant light (&.ns-light, .ns-light &);
+@custom-variant ios (&.ns-ios, .ns-ios &);
+@custom-variant android (&.ns-android, .ns-android &);
+:root {
+  --ui-text-dimmed: var(--color-neutral-400);
+  --ui-text-muted: var(--color-neutral-500);
+  --ui-text-toned: var(--color-neutral-600);
+  --ui-text: var(--color-neutral-700);
+  --ui-text-highlighted: var(--color-neutral-900);
+  --ui-text-inverted: var(--color-white);
+
+  /* Background */
+  --ui-bg: var(--color-white);
+  --ui-bg-muted: var(--color-neutral-50);
+  --ui-bg-elevated: var(--color-neutral-100);
+  --ui-bg-accented: var(--color-neutral-200);
+  --ui-bg-inverted: var(--color-neutral-900);
+
+  /* Border */
+  --ui-border: var(--color-neutral-200);
+  --ui-border-muted: var(--color-neutral-200);
+  --ui-border-accented: var(--color-neutral-300);
+  --ui-border-inverted: var(--color-neutral-900);
+
+  /* DARK */
+
+  /* Text */
+  --dark-ui-text-dimmed: var(--color-neutral-500);
+  --dark-ui-text-muted: var(--color-neutral-400);
+  --dark-ui-text-toned: var(--color-neutral-300);
+  --dark-ui-text: var(--color-neutral-200);
+  --dark-ui-text-highlighted: var(--color-white);
+  --dark-ui-text-inverted: var(--color-neutral-900);
+
+  /* Background */
+  --dark-ui-bg: var(--color-neutral-900);
+  --dark-ui-bg-muted: var(--color-neutral-800);
+  --dark-ui-bg-elevated: var(--color-neutral-800);
+  --dark-ui-bg-accented: var(--color-neutral-700);
+  --dark-ui-bg-inverted: var(--color-white);
+
+  /* Border */
+  --ui-border: var(--color-neutral-800);
+  --ui-border-muted: var(--color-neutral-700);
+  --ui-border-accented: var(--color-neutral-700);
+  --ui-border-inverted: var(--color-white);
+}
+
+/* Add custom classes */
+@layer utilities {
+  .bg-elevated {
+    background-color: var(--ui-bg-elevated);
+  }
+  .bg-dark-elevated {
+    background-color: var(--dark-ui-bg-elevated);
+  }
+}
+
+.fa {
+  font-family: FontAwesome, fontawesome-webfont;
+}
+.fab {
+  font-family: 'Font Awesome 5 Brands', 'fa-brands-400';
+  font-weight: 400;
+}
+
+.fas {
+  font-family: 'Font Awesome 5 Free', 'fa-solid-900';
+  font-weight: 900;
+}
+
+.far {
+  font-family: 'Font Awesome 5 Free', 'fa-regular-400';
+  font-weight: 400;
+}
+
+:root {
+  --color-dark: #121212;
+  --dark-primary: var(--color-sky-200);
+  --bg-light: white;
+  --text-dark: white;
+}
+
+.test-bg {
+  background-color: var(--color-neutral-500);
+}
+
+ActionBar {
+  background-color: white;
+
+  Label {
+    color: var(--color-dark);
+  }
+}
+
+Page {
+  background-color: white;
+}
+
+Label {
+  color: var(--color-dark);
+}
+
+.ns-dark {
+  /* Button {
+    background-color: var(--color-sky-300);
+    color: var(--color-black);
+  } */
+
+  Page {
+    background-color: var(--color-dark);
+  }
+
+  Label {
+    color: var(--color-white);
+  }
+
+  ActionBar {
+    background-color: var(--color-dark);
+
+    Label {
+      color: white;
+    }
+  }
+}

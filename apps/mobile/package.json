@@ -1,0 +1,26 @@
+{
+  "name": "security-camera-mobile",
+  "main": "src/app.ts",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@nativescript-community/ui-drawer": "^0.1.31",
+    "@nativescript/core": "~8.9.1",
+    "@nativescript/firebase-auth": "^5.0.2",
+    "@nativescript/firebase-core": "^5.0.2",
+    "@nativescript/firebase-firestore": "^5.0.2",
+    "@nativescript/firebase-messaging": "^5.0.2",
+    "@nativescript/google-signin": "^2.1.1",
+    "@nativescript/theme": "^3.1.0",
+    "nativescript-vue": "3.0.1"
+  },
+  "devDependencies": {
+    "@nativescript/android": "8.9.2",
+    "@nativescript/tailwind": "~4.0.3",
+    "@nativescript/types": "~8.9.1",
+    "@nativescript/webpack": "~5.0.24",
+    "@types/node": "~22.14.0",
+    "tailwindcss": "^4.1.3",
+    "typescript": "^5.8.3"
+  }
+}
