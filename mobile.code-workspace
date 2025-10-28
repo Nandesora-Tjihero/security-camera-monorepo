@@ -1,0 +1,21 @@
+{
+  "folders": [
+    {
+      "path": "apps/mobile"
+    }
+  ],
+  "settings": {
+    "workbench.colorTheme": "Solarized Dark",
+    "workbench.iconTheme": "vscode-icons",
+    "window.title": "MOBILE Workspace"
+  },
+  "extensions": {
+    "recommendations": [
+      "tsvetan-ganev.nativescript-xml-snippets",
+      "nativescript.nativescript",
+      "msaelices.nativescript-vue-snippets",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint"
+    ]
+  }
+}

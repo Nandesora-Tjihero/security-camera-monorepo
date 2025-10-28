@@ -1,0 +1,19 @@
+{
+  "folders": [
+    {
+      "path": "apps/backend"
+    }
+  ],
+  "settings": {
+    "workbench.colorTheme": "Monokai Pro (Filter Spectrum)",
+    "workbench.iconTheme": "material-icon-theme",
+    "window.title": "FUNCTIONS Workspace",
+    "workbench.colorCustomizations": {
+      "titleBar.activeBackground": "#E74035",
+      "titleBar.activeForeground": "#FFFFFF"
+    }
+  },
+  "extensions": {
+    "recommendations": ["dbaeumer.vscode-eslint", "Firebase.firebase-tools"]
+  }
+}

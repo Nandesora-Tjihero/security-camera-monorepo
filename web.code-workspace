@@ -1,0 +1,23 @@
+{
+  "folders": [
+    {
+      "path": "apps/web"
+    }
+  ],
+  "settings": {
+    "workbench.colorTheme": "Tokyo Night Light",
+    "workbench.iconTheme": "vscode-icons",
+    "window.title": "WEB Workspace",
+    "workbench.colorCustomizations": {
+      "titleBar.activeBackground": "#1E90FF",
+      "titleBar.activeForeground": "#FFFFFF"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "Vue.volar",
+      "dbaeumer.vscode-eslint",
+      "esbenp.prettier-vscode"
+    ]
+  }
+}

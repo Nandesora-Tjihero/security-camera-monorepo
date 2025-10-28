@@ -1,0 +1,58 @@
+{
+  "functions": [
+    {
+      "region": "europe-west4",
+      "source": "apps/backend",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local",
+        ".env"
+      ]
+    }
+  ],
+  "hosting": [
+    {
+      "site": "security-camera-a413e",
+      "public": ".output/public",
+      "cleanUrls": true,
+      "rewrites": [
+        {
+          "source": "**",
+          "function": "server"
+        }
+      ]
+    }
+  ],
+  "firestore": {
+    "database": "(default)",
+    "location": "eur3",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "project": "security-camera-a413e",
+    "rules": "storage.rules"
+  },
+  "emulators": {
+    "auth": {
+      "port": 9099
+    },
+    "functions": {
+      "port": 5001
+    },
+    "firestore": {
+      "port": 8080
+    },
+    "storage": {
+      "port": 9199
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4000
+    },
+    "singleProjectMode": true
+  }
+}
