@@ -37,7 +37,7 @@
     </UContainer>
 
     <p class="mt-5 text-black/50 dark:text-white/50 text-center">
-      &copy; 2025 Your Company. All rights reserved.
+      &copy; 2025 Security Camera. All rights reserved.
     </p>
   </footer>
 </template>
