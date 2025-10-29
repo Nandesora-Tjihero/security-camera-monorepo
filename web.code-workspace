@@ -9,7 +9,7 @@
     "workbench.iconTheme": "vscode-icons",
     "window.title": "WEB Workspace",
     "workbench.colorCustomizations": {
-      "titleBar.activeBackground": "#1E90FF",
+      "titleBar.activeBackground": "#01A073",
       "titleBar.activeForeground": "#FFFFFF"
     }
   },
