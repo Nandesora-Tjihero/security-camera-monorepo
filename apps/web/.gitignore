@@ -24,4 +24,5 @@ logs
 !.env.example
 
 security-camera-a413e-firebase-adminsdk-fbsvc-9239d5d459.json
-firebase-client-config.json
+# Sentry Config File
+.env.sentry-build-plugin
