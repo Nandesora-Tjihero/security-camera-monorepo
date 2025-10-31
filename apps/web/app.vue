@@ -38,8 +38,10 @@
       },
     ],
   });
+
   const navItems = ref<{ label: string; to: string }[]>([]);
   const route = useRoute();
+
   onMounted(() => {
     if (route.path === '/') {
       navItems.value = [
