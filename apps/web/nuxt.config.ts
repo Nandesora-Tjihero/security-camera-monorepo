@@ -76,6 +76,8 @@ export default defineNuxtConfig({
       sentry: {
         dns: '',
       },
+      baseUrlLocal: '',
+      baseUrlProduction: '',
     },
     stripeApiKey: '',
     stripePublishableKey: '',
