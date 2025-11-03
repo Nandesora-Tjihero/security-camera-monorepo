@@ -1,10 +1,12 @@
 import Stripe from 'stripe';
 import { IBillingService } from './getBillingService.server';
 
-const DOMAIN = 'http://localhost:3000';
-
 export function billingStripe(): IBillingService {
   const stripeClient = new Stripe(useRuntimeConfig().stripeApiKey);
+
+  const DOMAIN = import.meta.dev
+    ? useRuntimeConfig().public.baseUrlLocal
+    : useRuntimeConfig().public.baseUrlProduction;
 
   async function createCheckoutSession(
     lookupKey: string,

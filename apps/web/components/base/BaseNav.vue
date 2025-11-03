@@ -25,7 +25,10 @@
           {{ item.label }} 2
         </ULink>
       </div>
-      <BaseHeaderDropdown @close="updateIsOpen(false)" />
+      <BaseHeaderDropdown
+        @close="updateIsOpen(false)"
+        class="mx-3"
+      />
     </USlideover>
   </nav>
 </template>

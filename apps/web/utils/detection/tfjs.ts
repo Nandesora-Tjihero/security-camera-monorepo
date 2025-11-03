@@ -1,6 +1,7 @@
 import '@tensorflow/tfjs-backend-webgl';
 import '@tensorflow/tfjs-core';
 import '@tensorflow/tfjs-backend-cpu';
+
 import { load } from '@tensorflow-models/coco-ssd';
 import { toRaw } from 'vue';
 
@@ -12,7 +13,6 @@ export const model: Ref<ObjectDetection | null> = ref(null);
 export async function loadModel() {
   if (!model.value) {
     model.value = await load();
-    console.log('Model loaded');
   }
   return model;
 }

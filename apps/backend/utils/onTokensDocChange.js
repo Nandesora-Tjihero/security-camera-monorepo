@@ -1,4 +1,5 @@
 const { onDocumentUpdated } = require('firebase-functions/v2/firestore');
+
 const fetch = require('node-fetch');
 
 const { config } = require('dotenv');

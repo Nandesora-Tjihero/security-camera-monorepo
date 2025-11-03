@@ -5,7 +5,9 @@ import {
   onAuthStateChanged,
   type User,
   connectAuthEmulator,
+  getAuth,
 } from 'firebase/auth';
+import type { IAuthService } from '~/core/contracts';
 import type { ScUser } from '~/core/models/user.model';
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -27,6 +29,14 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   }
 
+  function convertToScUser(user: User): ScUser {
+    return {
+      uid: user.uid,
+      email: user.email ?? '',
+      displayName: user.displayName ?? '',
+    };
+  }
+
   async function signOut() {
     try {
       await logOut(auth);
@@ -37,21 +47,15 @@ export default defineNuxtPlugin((nuxtApp) => {
     }
   }
 
-  function convertToScUser(user: any): ScUser {
-    return {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-    };
-  }
+  const firebaseAuth: IAuthService = {
+    signInWithGoogle,
+    convertToScUser,
+    signOut,
+  };
 
   return {
     provide: {
-      firebaseAuth: {
-        signInWithGoogle,
-        convertToScUser,
-        signOut,
-      },
+      firebaseAuth,
     },
   };
 });

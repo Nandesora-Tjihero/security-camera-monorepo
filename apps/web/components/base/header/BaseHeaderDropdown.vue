@@ -25,7 +25,6 @@
 </template>
 
 <script setup lang="ts">
-  import { model } from '~/utils/detection/tfjs';
   import { getAuthService } from '~/utils/services/getAuthService';
 
   const { setUser, setSubscription } = useUser();

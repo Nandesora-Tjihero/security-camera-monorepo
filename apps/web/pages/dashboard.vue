@@ -1,7 +1,7 @@
 <template>
   <section
     ref="demos"
-    class="max-w-[640px] mx-auto"
+    class="max-w-[640px] mx-auto max-sm:px-5 py-5"
   >
     <BaseHeading class="">Security Camera</BaseHeading>
     <h2 class="text-xl my-10">Welcome!</h2>

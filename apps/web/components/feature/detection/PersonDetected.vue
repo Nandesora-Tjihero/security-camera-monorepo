@@ -26,7 +26,7 @@
       @loadeddata="handleLoadedData"
       width="560"
       height="320"
-      class="bg-gray-200 rounded-lg block mt-5 max-h-[20rem] w-[35rem] aspect-video object-cover"
+      class="bg-gray-200 block mt-5 max-h-[20rem] w-[35rem] aspect-video object-cover"
     ></video>
   </section>
 </template>

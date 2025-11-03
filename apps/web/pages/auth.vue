@@ -1,15 +1,26 @@
 <template>
-  <UContainer class="flex flex-col p-10 items-center h-full">
-    <BaseHeading class="mb-10">Sign In</BaseHeading>
-    <h2 class="text-xl mb-5">To start monitoring, sign in.</h2>
+  <NuxtErrorBoundary>
+    <UContainer class="flex flex-col p-10 items-center h-full">
+      <BaseHeading class="mb-10">Sign In</BaseHeading>
 
-    <UButton
-      @click="signInWithGoogle"
-      class="!bg-black dark:!bg-white"
-      data-testid="google-signin-btn"
-      >Sign In With Google</UButton
-    >
-  </UContainer>
+      <h2 class="text-xl mb-5">To start monitoring, sign in.</h2>
+
+      <UButton
+        @click="signInWithGoogle"
+        class="!bg-black dark:!bg-white"
+        data-testid="google-signin-btn"
+        >Sign In With Google</UButton
+      >
+    </UContainer>
+
+    <template #error="{ error }">
+      <p class="text-red-500">
+        Error: <code>{{ error }}</code>
+      </p>
+
+      <UButton @click="resetError(error)"> Reset </UButton>
+    </template>
+  </NuxtErrorBoundary>
 </template>
 <script setup lang="ts">
   import type { GoogleUser } from '~/core/models/user.model';
@@ -28,6 +39,10 @@
   const databaseService = getDatabaseService();
 
   const billingService = getBillingService();
+
+  const resetError = (error: any) => {
+    error.value = null;
+  };
 
   watch(
     () => user.value,

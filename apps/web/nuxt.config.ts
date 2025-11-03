@@ -1,9 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-
+import { config } from 'dotenv';
+import fs from 'node:fs';
+import path from 'node:path';
+config();
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   // devtools: { enabled: true },
-  vite: { server: { watch: { usePolling: true, interval: 150 } } },
+  vite: {
+    server: { watch: { usePolling: true, interval: 150 } },
+  },
   nitro: {
     firebase: {
       nodeVersion: '18',
@@ -33,7 +38,19 @@ export default defineNuxtConfig({
     '@nuxt/test-utils/module',
     '@nuxt/fonts',
     '@nuxt/image',
+    '@sentry/nuxt/module',
   ],
+  sourcemap: { client: 'hidden' },
+  sentry: {
+    org: 'ombujoweb',
+    project: 'security-camera',
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+
+    sourceMapsUploadOptions: {
+      org: 'ombujoweb',
+      project: 'security-camera',
+    },
+  },
   fonts: {
     families: [
       {
@@ -56,6 +73,11 @@ export default defineNuxtConfig({
       appId: '',
       measurementId: '',
       vapidKey: '',
+      sentry: {
+        dns: '',
+      },
+      baseUrlLocal: '',
+      baseUrlProduction: '',
     },
     stripeApiKey: '',
     stripePublishableKey: '',

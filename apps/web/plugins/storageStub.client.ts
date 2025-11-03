@@ -1,4 +1,4 @@
-import type { StorageService } from '~/core/contracts/storage.contract';
+import type { IStorageService } from '~/core/contracts/storage.contract';
 
 export default defineNuxtPlugin((nuxtApp) => {
   const uploadImage = async (userId: string, blob: Blob) => {
@@ -23,5 +23,5 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.provide('storageStubService', {
     uploadImage,
     getImageUrl,
-  } as StorageService);
+  } as IStorageService);
 });

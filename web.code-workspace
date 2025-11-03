@@ -7,11 +7,7 @@
   "settings": {
     "workbench.colorTheme": "Tokyo Night Light",
     "workbench.iconTheme": "vscode-icons",
-    "window.title": "WEB Workspace",
-    "workbench.colorCustomizations": {
-      "titleBar.activeBackground": "#01A073",
-      "titleBar.activeForeground": "#FFFFFF"
-    }
+    "window.title": "WEB Workspace"
   },
   "extensions": {
     "recommendations": [
