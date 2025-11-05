@@ -11,6 +11,7 @@
         desde cualquier lugar.
       </h2>
 
+      <BaseLoadingIndicator v-if="loadingModel && !canSignIn" />
 
       <UButton
         v-show="canSignIn"
