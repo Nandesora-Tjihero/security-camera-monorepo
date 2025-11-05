@@ -21,8 +21,11 @@
   });
 
   import type Stripe from 'stripe';
-  import { getDatabaseService } from '~/utils/services/getDatabaseService';
-  import { getBillingService } from '~/utils/services/getBillingService';
+
+  import {
+    getDatabaseService,
+    getBillingService,
+  } from '~~/layers/01-base/app/utils/services';
 
   const { setSubscription, user } = useUser();
 
