@@ -3,34 +3,41 @@ export const useUserCanSignIn = () => {
   const canSignIn = ref(false);
   const { user } = useUser();
 
-  onMounted(() => {
-    const isCameraSupported = !!(
-      navigator.mediaDevices && navigator.mediaDevices.getUserMedia
-    );
+  if (import.meta.client) {
+    onMounted(() => {
+      console.log('dfd', navigator.mediaDevices);
+      const isCameraSupported = !!(
+        navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+      );
 
-    canSignIn.value =
-      isCameraSupported &&
-      !!model.value &&
-      !user.value &&
-      useRoute().path !== '/auth';
+      canSignIn.value =
+        isCameraSupported &&
+        !!model.value &&
+        !user.value &&
+        useRoute().path !== '/auth';
 
-    console.log('canSignIn:', canSignIn.value);
-    watch(
-      () => model.value,
-      (newModel) => {
-        const isCameraSupported = !!(
-          navigator.mediaDevices && navigator.mediaDevices.getUserMedia
-        );
+      console.log('canSignIn:', canSignIn.value);
+      watch(
+        () => model.value,
+        (newModel) => {
+          const isCameraSupported = !!(
+            navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+          );
 
-        canSignIn.value =
-          isCameraSupported &&
-          !!newModel &&
-          !user.value &&
-          useRoute().path !== '/auth';
-        console.log('canSignIn (model watch):', canSignIn.value);
-      }
-    );
-  });
+          canSignIn.value =
+            isCameraSupported &&
+            !!newModel &&
+            !user.value &&
+            useRoute().path !== '/auth';
+          console.log(
+            'canSignIn (model watch):',
+            canSignIn.value,
+            isCameraSupported
+          );
+        }
+      );
+    });
+  }
 
   return {
     canSignIn,

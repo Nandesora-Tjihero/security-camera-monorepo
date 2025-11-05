@@ -1,13 +1,13 @@
 <template>
   <nav>
     <div class="hidden md:flex flex-grow justify-center gap-5">
-      <ULink
+      <!-- <ULink
         v-for="item in props.navItems"
         :key="item.to"
         :to="item.to"
       >
         {{ item.label }}
-      </ULink>
+      </ULink> -->
     </div>
     <USlideover
       @update:model-value="updateIsOpen"
@@ -15,7 +15,7 @@
       class="md:hidden max-w-72"
     >
       <!-- Mobile Navigation -->
-      <div class="flex flex-col gap-5 p-5">
+      <!-- <div class="flex flex-col gap-5 p-5">
         <ULink
           v-for="item in props.navItems"
           :key="item.to"
@@ -24,7 +24,7 @@
         >
           {{ item.label }} 2
         </ULink>
-      </div>
+      </div> -->
       <BaseHeaderDropdown
         @close="updateIsOpen(false)"
         class="mx-3"

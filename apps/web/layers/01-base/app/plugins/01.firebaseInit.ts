@@ -25,6 +25,8 @@ const initFirebaseApp = () => {
     measurementId: runtimeConfig.public.measurementId,
   };
 
+  console.log('firebaseconfig', firebaseConfig);
+
   return getApps().length ? getApp() : initializeApp(firebaseConfig);
 };
 

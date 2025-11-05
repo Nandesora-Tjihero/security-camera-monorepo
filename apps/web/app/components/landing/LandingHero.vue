@@ -10,19 +10,10 @@
         inteligente. Recibe alertas en tiempo real y accede a las grabaciones
         desde cualquier lugar.
       </h2>
-
-      <div v-if="loadingModel && !canSignIn">
-        <!-- <label class="text-sky-500 z-10"
-          >Checking service availability...</label
-        > -->
-        <div class="grid gap-2">
-          <USkeleton class="h-4 w-24" />
-          <USkeleton class="h-4 w-14" />
-        </div>
-      </div>
+      <BaseLoadingIndicator v-if="loadingModel && !canSignIn" />
 
       <UButton
-        v-if="canSignIn"
+        v-show="canSignIn"
         :variant="buttonConfig.variant"
         @click="handleButtonClick"
         class="w-fit inline-block p-2 content-center"
