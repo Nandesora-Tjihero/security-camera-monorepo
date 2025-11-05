@@ -11,8 +11,9 @@
         desde cualquier lugar.
       </h2>
 
+
       <UButton
-        v-if="canSignIn"
+        v-show="canSignIn"
         :variant="buttonConfig.variant"
         @click="handleButtonClick"
         class="w-fit inline-block p-2 content-center"

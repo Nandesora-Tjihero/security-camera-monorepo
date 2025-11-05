@@ -1,11 +1,11 @@
 <template>
   <header class="flex justify-between items-center gap-10 p-10">
     <ULink to="/">Security Camera</ULink>
-    <!-- <BaseNav
+    <BaseNav
       :nav-items="navItems"
       :open="isOpen"
       @update:model-value="updateIsOpen"
-    /> -->
+    />
     <div class="flex items-center gap-4">
       <UButton
         :icon="
