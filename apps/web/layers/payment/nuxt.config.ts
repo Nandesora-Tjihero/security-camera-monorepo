@@ -7,9 +7,12 @@ interface PublicRuntimeConfig {
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      sentry: { dns: '' },
       baseUrlLocal: '',
       baseUrlProduction: '',
-    } satisfies PublicRuntimeConfig,
+    },
+    stripeApiKey: '',
+    stripePublishableKey: '',
+    firebaseAdminServiceAccountKey: '',
+    stripeWebhookSecret: '',
   },
 });
