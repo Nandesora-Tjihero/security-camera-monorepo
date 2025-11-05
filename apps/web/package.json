@@ -26,7 +26,6 @@
     "@tensorflow/tfjs-converter": "^4.22.0",
     "@tensorflow/tfjs-core": "^4.22.0",
     "@tensorflow/tfjs-node": "^4.22.0",
-    "@unlok-co/nuxt-stripe": "^3.0.0",
     "firebase": "^12.4.0",
     "firebase-admin": "^12.5.0",
     "firebase-frameworks": "^0.11.4",
@@ -34,7 +33,7 @@
     "googleapis": "^144.0.0",
     "import-in-the-middle": "^2.0.0",
     "mitt": "^3.0.1",
-    "nuxt": "^3.12.4",
+    "nuxt": "^4.2.0",
     "nuxt-storage": "^1.2.2",
     "stripe": "^16.10.0",
     "vue": "latest"

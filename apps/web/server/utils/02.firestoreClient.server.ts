@@ -1,13 +1,8 @@
-import { firebaseApp } from '~/server/utils/01.firebaseInit';
 import {
   CollectionReference,
   DocumentReference,
   getFirestore,
 } from 'firebase-admin/firestore';
-import { IDatabaseService } from '~/core/contracts/database.contract';
-
-import type { FirestoreAdapter } from '~/shared/types/firestore-adapter';
-import { firestoreDB } from '~/shared/firestore';
 
 const adminFirestoreAdapter: FirestoreAdapter = {
   doc: (

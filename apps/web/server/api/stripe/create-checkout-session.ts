@@ -1,5 +1,3 @@
-import { getBillingService } from '~/server/utils/getBillingService.server';
-
 export default defineEventHandler(async (event) => {
   const { lookupKey, email, action } = await readBody(event);
 

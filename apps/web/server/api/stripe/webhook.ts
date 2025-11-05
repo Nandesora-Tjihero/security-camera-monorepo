@@ -1,5 +1,4 @@
 import { Stripe } from 'stripe';
-import { getDatabaseService } from '~/server/utils/getDatabaseService.server';
 const stripe = new Stripe(useRuntimeConfig().stripeApiKey);
 
 export default defineEventHandler(async (event) => {
