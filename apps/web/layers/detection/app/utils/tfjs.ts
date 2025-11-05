@@ -8,13 +8,21 @@ import { toRaw } from 'vue';
 import type { ObjectDetection } from '@tensorflow-models/coco-ssd';
 import type { IDetectionService } from '#shared/core/contracts';
 
-export const model: Ref<ObjectDetection | null> = ref(null);
+export const model = ref<ObjectDetection | null>(null);
+export const loadingModel = ref<boolean>(false);
 
 export async function loadModel() {
-  if (!model.value) {
-    model.value = await load();
+  try {
+    if (!model.value) {
+      loadingModel.value = true;
+      model.value = await load();
+    }
+    return model;
+  } catch (error: any) {
+    throw createError({ name: 'ML Model Availability Check', message: error });
+  } finally {
+    loadingModel.value = false;
   }
-  return model;
 }
 
 export function getTfjsDetector(): IDetectionService {

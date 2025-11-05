@@ -16,6 +16,8 @@
         trailing-icon="i-heroicons-chevron-down-20-solid"
       />
     </UDropdown>
+    <BaseLoadingIndicator v-if="loadingModel && !canSignIn" />
+
     <ULink
       v-if="canSignIn"
       @click.prevent="goToLogin"
