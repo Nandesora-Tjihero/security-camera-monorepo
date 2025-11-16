@@ -23,7 +23,8 @@
   "devDependencies": {
     "chai": "^6.2.0",
     "firebase-functions-test": "^3.4.1",
-    "mocha": "^11.7.4"
+    "mocha": "^11.7.4",
+    "vitest": "^4.0.8"
   },
   "private": true
 }
