@@ -26,3 +26,12 @@ logs
 security-camera-a413e-firebase-adminsdk-fbsvc-9239d5d459.json
 # Sentry Config File
 .env.sentry-build-plugin
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+
+playwright/.auth
