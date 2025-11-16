@@ -3,12 +3,10 @@ const { getFirestore, Timestamp } = require('firebase-admin/firestore');
 const { getMessaging } = require('firebase-admin/messaging');
 const { getStorage } = require('firebase-admin/storage');
 
-const { config } = require('dotenv');
-config()
+const { defineString } = require('firebase-functions/params');
 
-const REGION = process.env.FUNCTIONS_REGION;
-const BUCKET_NAME = process.env.BUCKET_NAME;
-
+const REGION = defineString('FUNCTIONS_REGION');
+const BUCKET_NAME = defineString('STORAGE_BUCKET');
 const db = getFirestore();
 const messaging = getMessaging();
 const storage = getStorage();
@@ -52,7 +50,7 @@ exports.onDetectionImageUploaded = onObjectFinalized({
     }
 
     const detectionData = {
-      imageUrl,
+      filePath: object.name,
       fileName,
       timestamp: Timestamp.fromMillis(
         Number(fileName.split('_')[1])
