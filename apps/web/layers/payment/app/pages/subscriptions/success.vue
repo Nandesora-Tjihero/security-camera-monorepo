@@ -16,9 +16,9 @@
 </template>
 
 <script setup lang="ts">
-  definePageMeta({
-    middleware: ['auth'],
-  });
+  // definePageMeta({
+  //   middleware: ['auth'],
+  // });
 
   import type Stripe from 'stripe';
 
@@ -58,7 +58,8 @@
             id: subscriptionSession.id,
             status: subscriptionSession.subscription.status,
             current_period_end: subscriptionSession.expires_at,
-            price_id: subscriptionSession.subscription.items.data[0].price.id,
+            price_id:
+              subscriptionSession?.subscription?.items?.data[0]?.price.id,
           });
         }
 
