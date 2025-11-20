@@ -1,6 +1,5 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp();
 
 exports.removeFromFirestore = functions
     .region('europe-west1')
