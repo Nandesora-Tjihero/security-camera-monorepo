@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
       break;
     case 'customer.subscription.trial_will_end':
       subscription = stripeEvent.data.object;
-
+      await handleSubscriptionUpdate(stripeEvent);
       break;
     case 'customer.subscription.updated':
       subscription = stripeEvent.data.object;
@@ -70,7 +70,7 @@ async function handleSubscriptionUpdate(stripeEvent: Stripe.Event) {
 
   const subscription = stripeEvent.data.object as Stripe.Subscription;
   const customerId = getUserEmailFromEvent(stripeEvent);
-  console.log('Customer ID:', stripeEvent);
+
   if (!customerId) return;
 
   await updateSubscriptionInDB(customerId, subscription);
