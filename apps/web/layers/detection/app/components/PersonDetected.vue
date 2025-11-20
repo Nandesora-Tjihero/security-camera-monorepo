@@ -1,8 +1,9 @@
 <template>
   <section>
     <p
-      v-if="!userComposable.hasNotificationDevice.value"
+      v-if="!hasNotificationDevice"
       class="text-yellow-500 mb-5"
+      data-test="no-device-registered"
     >
       Please add a notification device from the mobile app to enable monitoring.
     </p>
@@ -32,30 +33,28 @@
 </template>
 
 <script setup lang="ts">
-  const userComposable = useUser();
+  // onMounted(() => {
+  //   if (!userComposable.hasNotificationDevice.value) {
+  //     // initiate SSE connection to register notification device
+  //     const eventSource = new EventSource(
+  //       `/api/sse?userId=${userComposable.user.value?.uid}`
+  //     );
+  //     eventSource.onmessage = (event) => {
+  //       const json = JSON.parse(event.data);
+  //       console.log(
+  //         'SSE event data:',
+  //         json.data.type === 'REGISTER_NOTIFICATION_DEVICE' && json.data.tokens,
+  //         json
+  //       );
+  //       if (json.type === 'REGISTER_NOTIFICATION_DEVICE' && json.data.tokens) {
+  //         console.log('SSE message received:', json);
 
-  onMounted(() => {
-    if (!userComposable.hasNotificationDevice.value) {
-      // initiate SSE connection to register notification device
-      const eventSource = new EventSource(
-        `/api/sse?userId=${userComposable.user.value?.uid}`
-      );
-      eventSource.onmessage = (event) => {
-        const json = JSON.parse(event.data);
-        console.log(
-          'SSE event data:',
-          json.data.type === 'REGISTER_NOTIFICATION_DEVICE' && json.data.tokens,
-          json
-        );
-        if (json.type === 'REGISTER_NOTIFICATION_DEVICE' && json.data.tokens) {
-          console.log('SSE message received:', json);
-
-          userComposable.setHasNotificationDevice(json.data.tokens.length > 0);
-          // eventSource.close();
-        }
-      };
-    }
-  });
+  //         userComposable.setHasNotificationDevice(json.data.tokens.length > 0);
+  //         // eventSource.close();
+  //       }
+  //     };
+  //   }
+  // });
 
   const {
     mediaStream,
@@ -64,13 +63,7 @@
     startMonitoring,
     stopMonitoring,
     handleLoadedData,
-    onPersonDetected,
   } = usePersonDetection();
 
-  const { canMonitor } = useUser();
-  // Handle person detection events
-  onPersonDetected((imageUrl: string) => {
-    console.log(`Person detected! Image saved: ${imageUrl}`);
-    // Add any UI notifications here
-  });
+  const { canMonitor, hasNotificationDevice } = useUser();
 </script>
