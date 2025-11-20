@@ -1,7 +1,11 @@
 <template>
   <NuxtErrorBoundary>
     <UContainer class="flex flex-col p-10 items-center h-full">
-      <BaseHeading class="mb-10">Sign In</BaseHeading>
+      <BaseHeading
+        class="mb-10"
+        data-testid="auth-page"
+        >Sign In</BaseHeading
+      >
 
       <h2 class="text-xl mb-5">To start monitoring, sign in.</h2>
 
@@ -9,7 +13,7 @@
         @click="signInWithGoogle"
         class="!bg-black dark:!bg-white"
         data-testid="google-signin-btn"
-        >Sign In With Google</UButton
+        >Sign In with Google</UButton
       >
     </UContainer>
 
@@ -24,11 +28,12 @@
 </template>
 <script setup lang="ts">
   import type { GoogleUser } from '#shared/core/models';
+  import type { User } from 'firebase/auth';
   import {
     getAuthService,
     getDatabaseService,
     getBillingService,
-  } from '~~/layers/01-base/app/utils/services';
+  } from '#layers/01-base/app/utils/services';
 
   const { subscription, user, setUser, setSubscription } = useUser();
 
@@ -43,7 +48,6 @@
   const resetError = (error: any) => {
     error.value = null;
   };
-
   watch(
     () => user.value,
     async (newUser) => {
@@ -86,11 +90,10 @@
   const signInWithGoogle = async () => {
     try {
       if (authService) {
-        const userFromGoogleAuth = await authService.signInWithGoogle();
+        const userFromGoogleAuth: User = await authService.signInWithGoogle();
         let userFromDB = await databaseService.getUserById(
           (userFromGoogleAuth as GoogleUser).uid
         );
-        console.log('Fetched user from DB:', userFromDB);
 
         // new user, create in database and create a free trial subscription
         if (!userFromDB) {
@@ -103,7 +106,13 @@
             (userFromGoogleAuth as GoogleUser).uid
           );
         }
-        console.log('User signed in:', userFromDB);
+        await $fetch('/api/session-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            idToken: await userFromGoogleAuth.getIdToken(),
+          }),
+        });
         setUser(userFromDB!); // this triggers the watch above to get subscription from db
       } else {
         console.error('Auth service is not available.');
