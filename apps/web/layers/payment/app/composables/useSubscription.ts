@@ -29,8 +29,20 @@ export const useSubscription = () => {
   const hasActiveSubscription = computed(() => {
     return (
       subscription.value?.status === 'active' ||
-      subscription.value?.status === 'trialing'
+      (subscription.value?.status === 'trialing' &&
+        !currentPeriodEndDateIsPast.value)
     );
+  });
+
+  const currentPeriodEndDateIsPast = computed(() => {
+    if (!subscription.value?.current_period_end) {
+      return false;
+    }
+    const currentPeriodEnd = new Date(
+      subscription.value.current_period_end * 1000
+    );
+    const now = new Date();
+    return currentPeriodEnd < now;
   });
 
   const getButtonConfig: ComputedRef<ButtonConfig> = computed(() => {
@@ -65,5 +77,6 @@ export const useSubscription = () => {
     hasTriedFreeTrial: readonly(hasTriedFreeTrial),
     getButtonConfig: readonly(getButtonConfig),
     markFreeTrialSeen,
+    hasActiveSubscription: readonly(hasActiveSubscription),
   };
 };
