@@ -1,7 +1,7 @@
 import type { DetectedObject } from '@tensorflow-models/coco-ssd';
 
 export interface IDetectionService {
-  startDetection(video: HTMLVideoElement): void;
+  startDetection(video: HTMLVideoElement): Promise<void>;
   stopDetection(): void;
-  onDetection(callback: (detections: DetectedObject[]) => void): void;
+  onDetection(callback: (detections: DetectedObject) => void): void;
 }
