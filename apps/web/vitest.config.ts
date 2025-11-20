@@ -1,6 +1,10 @@
 import { defineConfig } from 'vitest/config';
 import { defineVitestProject } from '@nuxt/test-utils/config';
 
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 export default defineConfig({
   test: {
     projects: [
@@ -14,7 +18,7 @@ export default defineConfig({
       await defineVitestProject({
         test: {
           name: 'nuxt',
-          include: ['test/nuxt/*.{test,spec}.ts'],
+          include: ['app/test/nuxt/*.{test,spec}.ts'],
           environment: 'nuxt',
           setupFiles: ['test/setup.ts'],
         },
