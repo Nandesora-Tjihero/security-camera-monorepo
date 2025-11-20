@@ -5,7 +5,6 @@ export const useUserCanSignIn = () => {
 
   if (import.meta.client) {
     onMounted(() => {
-      console.log('dfd', navigator.mediaDevices);
       const isCameraSupported = !!(
         navigator.mediaDevices && navigator.mediaDevices.getUserMedia
       );
@@ -16,26 +15,17 @@ export const useUserCanSignIn = () => {
         !user.value &&
         useRoute().path !== '/auth';
 
-      console.log('canSignIn:', canSignIn.value);
-      watch(
-        () => model.value,
-        (newModel) => {
-          const isCameraSupported = !!(
-            navigator.mediaDevices && navigator.mediaDevices.getUserMedia
-          );
+      watchEffect(() => {
+        const isCameraSupported = !!(
+          navigator.mediaDevices && navigator.mediaDevices.getUserMedia
+        );
 
-          canSignIn.value =
-            isCameraSupported &&
-            !!newModel &&
-            !user.value &&
-            useRoute().path !== '/auth';
-          console.log(
-            'canSignIn (model watch):',
-            canSignIn.value,
-            isCameraSupported
-          );
-        }
-      );
+        canSignIn.value =
+          isCameraSupported &&
+          !!model.value &&
+          !user.value &&
+          useRoute().path !== '/auth';
+      });
     });
   }
 
