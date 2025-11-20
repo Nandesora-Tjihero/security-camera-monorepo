@@ -29,15 +29,16 @@
 <script setup lang="ts">
   import { getAuthService } from '~~/layers/01-base/app/utils/services';
 
-  const { setUser, setSubscription } = useUser();
+  const { clearUser, setSubscription } = useUser();
   const emits = defineEmits(['close']);
 
   const signOut = async () => {
     try {
       await getAuthService().signOut();
       emits('close');
-      setUser(null);
+      clearUser();
       setSubscription(null);
+      await fetch('/api/session-logout', { method: 'POST' });
       // useState("user", () => null); why does it cause weird behavior on signin again?
       await navigateTo('/');
     } catch (error) {

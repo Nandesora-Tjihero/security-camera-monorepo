@@ -1,11 +1,16 @@
 import type { ISubscription } from '#shared/core/contracts';
 import type { ScUser } from '#shared/core/models';
+import { browser } from '@tensorflow/tfjs-core';
 
 export const useUser = () => {
   const user = useState<ScUser | null>('user', () => null);
 
   const setUser = (newUser: ScUser | null) => {
     user.value = newUser;
+  };
+
+  const clearUser = () => {
+    user.value = null;
   };
 
   watch(
@@ -44,15 +49,15 @@ export const useUser = () => {
     'hasNotificationDevice',
     () => (user.value?.tokens?.length ?? 0) > 0
   );
+
   const setHasNotificationDevice = (device: boolean) => {
-    console.log('Setting hasNotificationDevice to', device);
     hasNotificationDevice.value = device;
   };
-
   return {
     user: user,
     canMonitor,
     setUser,
+    clearUser,
     hasValidPlan,
     subscription,
     setSubscription,
