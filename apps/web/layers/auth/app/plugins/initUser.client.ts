@@ -1,11 +1,16 @@
-import { getAuthService } from '~~/layers/01-base/app/utils/services';
+import { getDatabaseService } from '#layers/01-base/app/utils/services';
 
 export default defineNuxtPlugin(async (nuxtApp) => {
-  const authService = getAuthService();
+  const databaseService = getDatabaseService();
 
-  const { setUser } = useUser();
-
+  const { setUser, clearUser } = useUser();
   const currentUser = await useNuxtApp().$firebase.getCurrentUser();
 
-  if (currentUser) setUser(authService.convertToScUser(currentUser));
+  if (!currentUser) {
+    clearUser();
+    return;
+  }
+
+  const userFromDB = await databaseService.getUserById(currentUser.uid);
+  setUser(userFromDB);
 });
