@@ -5,7 +5,10 @@ import '@tensorflow/tfjs-backend-cpu';
 import { load } from '@tensorflow-models/coco-ssd';
 import { toRaw } from 'vue';
 
-import type { ObjectDetection } from '@tensorflow-models/coco-ssd';
+import type {
+  DetectedObject,
+  ObjectDetection,
+} from '@tensorflow-models/coco-ssd';
 import type { IDetectionService } from '#shared/core/contracts';
 
 export const model = ref<ObjectDetection | null>(null);
@@ -25,9 +28,14 @@ export async function loadModel() {
   }
 }
 
-export function getTfjsDetector(): IDetectionService {
+export function getTfjsDetector(
+  detectionCooldownMs: number,
+  confidenceThreshold = 0.66
+): IDetectionService {
   let requestAnimationFrameId: number | null = null;
-  let detectionCallback: ((detections: any[]) => void) | null = null;
+  let detectionCallback: ((detections: DetectedObject) => void) | null = null;
+
+  let lastDetectionTimestamp: number = 0;
 
   const startDetection = async (video: HTMLVideoElement) => {
     if (!model.value) {
@@ -36,11 +44,26 @@ export function getTfjsDetector(): IDetectionService {
 
     try {
       const rawModel = toRaw(model.value);
+
+      const now = Date.now();
+      console.log('Now timestamp:', now);
+      if (now - lastDetectionTimestamp < detectionCooldownMs) {
+        // Still in cooldown period
+        return;
+      }
+      lastDetectionTimestamp = now;
+
       const detectedObjects = await rawModel.detect(video);
 
-      // Let the orchestrator handle the filtering and business logic
       if (detectionCallback && detectedObjects.length > 0) {
-        detectionCallback(detectedObjects);
+        for (const detection of detectedObjects) {
+          if (
+            detection.class === 'person' &&
+            detection.score > confidenceThreshold
+          ) {
+            detectionCallback(detection);
+          }
+        }
       }
 
       requestAnimationFrameId = requestAnimationFrame(() =>
@@ -49,6 +72,7 @@ export function getTfjsDetector(): IDetectionService {
     } catch (error) {
       console.error('Error in startDetection', error);
     }
+    console.log('requestAnimationFrameId', requestAnimationFrameId);
   };
 
   const stopDetection = () => {
@@ -58,7 +82,7 @@ export function getTfjsDetector(): IDetectionService {
     }
   };
 
-  const onDetection = (callback: (detections: any[]) => void) => {
+  const onDetection = (callback: (detections: DetectedObject) => void) => {
     detectionCallback = callback;
   };
 
