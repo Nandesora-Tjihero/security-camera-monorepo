@@ -1,4 +1,8 @@
-import { getDetectionOrchestrator } from '~/utils/services/detectionOrchestrator';
+import {
+  getDetectionService,
+  getStorageService,
+} from '~~/layers/01-base/app/utils/services';
+import type { DetectedObject } from '~~/shared/core/models';
 
 export function usePersonDetection() {
   const mediaStream = ref<MediaStream | null>(null);
@@ -8,8 +12,9 @@ export function usePersonDetection() {
 
   const { canMonitor, user } = useUser();
 
-  // Create orchestrator instance
-  const orchestrator = getDetectionOrchestrator();
+  // Services
+  const detectionService = getDetectionService();
+  const storageService = getStorageService();
 
   const setupMonitoring = async () => {
     try {
@@ -23,17 +28,15 @@ export function usePersonDetection() {
   };
 
   const startMonitoring = async () => {
-    console.log('Starting monitoring for user:', user.value?.uid);
-
     if (webcamStream.value && webcamStreamReady.value && user.value) {
-      await orchestrator.startMonitoring(webcamStream.value, user.value.uid);
+      detectionService.startDetection(webcamStream.value);
       webcamStream.value.play();
       isMonitoring.value = true;
     }
   };
 
   const stopMonitoring = async () => {
-    orchestrator.stopMonitoring();
+    detectionService.stopDetection();
     isMonitoring.value = false;
     webcamStream.value?.pause();
   };
@@ -42,8 +45,23 @@ export function usePersonDetection() {
     webcamStreamReady.value = true;
   };
 
-  const onPersonDetected = (callback: (imageUrl: string) => void) => {
-    orchestrator.onPersonDetected(callback);
+  const handlePersonDetected = async (
+    detection: DetectedObject
+  ): Promise<void> => {
+    try {
+      const blob = await captureImageFromVideoAndBoundingBoxValues(
+        detection.bbox,
+        webcamStream.value
+      );
+
+      if (blob && user.value) {
+        const imageUrl = await storageService.uploadImage(user.value.uid, blob);
+
+        console.log(`Person detected! Image uploaded: ${imageUrl}`);
+      }
+    } catch (error) {
+      console.error('Error handling person detection:', error);
+    }
   };
 
   onMounted(setupMonitoring);
@@ -55,6 +73,6 @@ export function usePersonDetection() {
     startMonitoring,
     stopMonitoring,
     handleLoadedData,
-    onPersonDetected,
+    handlePersonDetected,
   };
 }
