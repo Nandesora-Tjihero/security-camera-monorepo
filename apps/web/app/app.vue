@@ -11,8 +11,7 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { loadModel } from '#layers/detection/app/utils/tfjs';
-
+  import { loadModel } from '~~/layers/detection/app/utils/tfjs';
   loadModel();
 
   useHead({
@@ -39,8 +38,6 @@
   const route = useRoute();
 
   onMounted(async () => {
-    console.log('Mounted index.vue, user:', useUser().user.value);
-
     if (route.path === '/') {
       navItems.value = [
         { label: 'About', to: '/#about' },
