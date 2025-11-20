@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-  import { onMounted, inject, $navigateTo } from 'nativescript-vue';
+  import { onMounted, inject, $navigateTo, Ref, ref } from 'nativescript-vue';
   import { INotificationService } from '~/core/contracts';
 
   import { IAuthService } from '~/core/contracts/auth.contract';
   import { IDatabaseService } from '~/core/services/database.service';
-  import Dashboard from './dashboard.vue';
+
   import {
     ApplicationSettings,
     Button,
@@ -14,7 +14,9 @@
     LoadEventData,
     TouchGestureEventData,
   } from '@nativescript/core';
+
   import MainLayout from './mainLayout.vue';
+  import { IDetection } from '~/core/models';
 
   const authService = inject<IAuthService>('authService') as IAuthService;
   const databaseService = inject<IDatabaseService>(
@@ -23,6 +25,9 @@
   const notificationService = inject<INotificationService>(
     'notificationService'
   ) as INotificationService;
+
+  const detections =
+    inject<Ref<IDetection[]>>('detections') || ref<IDetection[]>([]);
 
   onMounted(() => {
     if (authService?.user?.value) {
@@ -53,12 +58,15 @@
           'Account with this email does not exist. Go to the web app to create an account and try again here.'
         );
       }
-      if (user) {
-        // Navigate to the main page or perform other actions
-        const hasPermission = await notificationService.requestUserPermission();
-        await notificationService.registerDeviceForPushNotifications(user.uid);
-        $navigateTo(MainLayout, { clearHistory: true });
+
+      console.log('user in db', userInDB.detections);
+      if (userInDB.detections && userInDB.detections.length) {
+        detections.value = userInDB.detections;
       }
+      // Navigate to the main page or perform other actions
+      const hasPermission = await notificationService.requestUserPermission();
+      await notificationService.registerDeviceForPushNotifications(user.uid);
+      $navigateTo(MainLayout, { clearHistory: true });
     } catch (error) {
       console.error('Error during Google Sign-In:', error);
     }
