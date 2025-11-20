@@ -7,3 +7,11 @@
     <LandingAffordable class="border-b border-white/15" /> -->
   <!-- <LandingFAQ /> -->
 </template>
+
+<script setup lang="ts">
+  const { user } = useUser();
+
+  if (user.value) {
+    await navigateTo('/dashboard');
+  }
+</script>
