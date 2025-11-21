@@ -1,11 +1,11 @@
-import { addClient, removeClient } from '../utils/sse';
+import { addClient, removeClient } from '../../utils/sse';
 
 export default defineEventHandler(async (event) => {
   setResponseHeader(event, 'Content-Type', 'text/event-stream');
   setResponseHeader(event, 'Cache-Control', 'no-cache');
   setResponseHeader(event, 'Connection', 'keep-alive');
 
-  const userId = getQuery(event).userId as string;
+  const userId = getRouterParam(event, 'userId');
   if (!userId) {
     event.node.res.statusCode = 400;
     event.node.res.end('Missing userId query parameter');
