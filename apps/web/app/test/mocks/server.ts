@@ -1,23 +1,29 @@
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse, sse } from 'msw';
 import { setupServer } from 'msw/node';
 
-const posts = [
-  {
-    userId: 1,
-    id: 1,
-    title: 'first post title',
-    body: 'first post body',
-  },
-  // ...
-];
+const userId = 'user-123';
+const tokens = ['token-abc', 'token-def'];
 
 const restHandlers = [
+  sse<{ REGISTER_NOTIFICATION_DEVICE: { userId: string; tokens: string[] } }>(
+    '/api/sse/:userId',
+    ({ client }) => {
+      client.send({
+        event: 'REGISTER_NOTIFICATION_DEVICE',
+        data: { userId, tokens },
+      });
+
+      queueMicrotask(() => {
+        client.close();
+      });
+    }
+  ),
   http.get('http://localhost:3000/dashboard', ({ cookies }) => {
     console.log(
       'Mock server received dashboard request',
       cookies.session || 'no-cookie'
     );
-    return HttpResponse.json(posts);
+    return HttpResponse.json([]);
   }),
   http.post(
     'http://localhost:3000/api/session-login',
