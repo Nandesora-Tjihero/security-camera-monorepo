@@ -33,29 +33,6 @@
 </template>
 
 <script setup lang="ts">
-  // onMounted(() => {
-  //   if (!userComposable.hasNotificationDevice.value) {
-  //     // initiate SSE connection to register notification device
-  //     const eventSource = new EventSource(
-  //       `/api/sse?userId=${userComposable.user.value?.uid}`
-  //     );
-  //     eventSource.onmessage = (event) => {
-  //       const json = JSON.parse(event.data);
-  //       console.log(
-  //         'SSE event data:',
-  //         json.data.type === 'REGISTER_NOTIFICATION_DEVICE' && json.data.tokens,
-  //         json
-  //       );
-  //       if (json.type === 'REGISTER_NOTIFICATION_DEVICE' && json.data.tokens) {
-  //         console.log('SSE message received:', json);
-
-  //         userComposable.setHasNotificationDevice(json.data.tokens.length > 0);
-  //         // eventSource.close();
-  //       }
-  //     };
-  //   }
-  // });
-
   const {
     mediaStream,
     webcamStream,
@@ -65,5 +42,33 @@
     handleLoadedData,
   } = usePersonDetection();
 
-  const { canMonitor, hasNotificationDevice } = useUser();
+  const { canMonitor, hasNotificationDevice, user, setHasNotificationDevice } =
+    useUser();
+
+  onMounted(() => {
+    if (!hasNotificationDevice.value) {
+      // initiate SSE connection to listen for device registration events
+      const eventSource = new EventSource(`/api/sse/${user.value?.uid}`);
+      eventSource.onmessage = (event) => {
+        const json = JSON.parse(event.data) as {
+          data: { event: string; userId: string; tokens: string[] };
+        };
+        console.log(
+          'SSE event data:',
+          json.data.event === 'REGISTER_NOTIFICATION_DEVICE' &&
+            json.data.tokens,
+          json
+        );
+        if (
+          json.data.event === 'REGISTER_NOTIFICATION_DEVICE' &&
+          json.data.tokens
+        ) {
+          console.log('SSE message received:', json);
+
+          setHasNotificationDevice(json.data.tokens.length > 0);
+          // eventSource.close();
+        }
+      };
+    }
+  });
 </script>

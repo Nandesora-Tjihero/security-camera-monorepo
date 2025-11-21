@@ -19,15 +19,15 @@ export function removeClient(id: string) {
 }
 
 export function sendEvent({
-  type,
+  event,
   data,
 }: {
-  type: string;
+  event: string;
   data: { tokens: string[]; userId: string };
 }) {
   clients.forEach((client) => {
     if (client.userId === data.userId) {
-      client.res.write(`data: ${JSON.stringify({ type, data })}\n\n`);
+      client.res.write(`data: ${JSON.stringify({ event, data })}\n\n`);
     }
   });
 }
