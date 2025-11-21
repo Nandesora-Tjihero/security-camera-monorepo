@@ -12,8 +12,30 @@ export function usePersonDetection() {
 
   const { canMonitor, user } = useUser();
 
+  const handlePersonDetected = async (
+    detection: DetectedObject
+  ): Promise<void> => {
+    try {
+      const blob = await captureImageFromVideoAndBoundingBoxValues(
+        detection.bbox,
+        webcamStream.value
+      );
+
+      if (blob && user.value) {
+        const imageUrl = await storageService.uploadImage(user.value.uid, blob);
+
+        console.log(`Person detected! Image uploaded: ${imageUrl}`);
+      }
+    } catch (error) {
+      console.error('Error handling person detection:', error);
+    }
+  };
+
   // Services
   const detectionService = getDetectionService();
+
+  detectionService.onDetection(handlePersonDetected);
+
   const storageService = getStorageService();
 
   const setupMonitoring = async () => {
@@ -45,25 +67,6 @@ export function usePersonDetection() {
     webcamStreamReady.value = true;
   };
 
-  const handlePersonDetected = async (
-    detection: DetectedObject
-  ): Promise<void> => {
-    try {
-      const blob = await captureImageFromVideoAndBoundingBoxValues(
-        detection.bbox,
-        webcamStream.value
-      );
-
-      if (blob && user.value) {
-        const imageUrl = await storageService.uploadImage(user.value.uid, blob);
-
-        console.log(`Person detected! Image uploaded: ${imageUrl}`);
-      }
-    } catch (error) {
-      console.error('Error handling person detection:', error);
-    }
-  };
-
   onMounted(setupMonitoring);
 
   return {
@@ -73,6 +76,6 @@ export function usePersonDetection() {
     startMonitoring,
     stopMonitoring,
     handleLoadedData,
-    handlePersonDetected,
+    // handlePersonDetected,
   };
 }
