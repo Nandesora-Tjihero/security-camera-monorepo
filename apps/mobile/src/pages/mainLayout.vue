@@ -64,16 +64,32 @@
     <template #actionBarContent>
       <GridLayout
         columns="* * auto"
+        rows="auto"
         class=""
       >
         <Label
           text="Detections"
           class="text-lg font-bold"
-          col="1"
+          fontWeight="700"
+          fontSize="20"
+          col="0"
         />
+        <Label
+          marginTop="40"
+          text="Security Camera"
+          class="text-lg font-bold"
+          fontSize="14"
+          color="#90A1B9"
+          col="0"
+        />
+
         <Button
           col="2"
+          backgroundColor="transparent"
+          fontSize="24"
           horizontalAlignment="right"
+          verticalAlignment="center"
+          :color="appearance === 'Light' ? '#000' : '#fff'"
           @tap="drawerOpen = drawerOpen ? false : true"
           text="&#xf013;"
           marginTop="25"
