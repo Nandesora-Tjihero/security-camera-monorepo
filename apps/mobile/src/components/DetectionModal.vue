@@ -12,27 +12,29 @@
 </script>
 <template>
   <Frame>
-    <Page>
-      <ActionBar title="Detection Details">
-        <GridLayout
-          rows=""
-          columns=""
-        >
+    <Page actionBarHidden="true">
+      <StackLayout class="bg-[#262626]">
+        <GridLayout>
+          <Image
+            :src="detection.imageUrl"
+            verticalAlignment="center"
+            stretch="aspectFill"
+            height="300"
+            backgroundColor="rgba(0,0,0,.6)"
+          />
           <Button
             horizontalAlignment="right"
+            width="50"
+            verticalAlignment="top"
             text="&#xf00d;"
             androidElevation="0"
             class="fas text-xl text-dark dark:text-white bg-transparent border-0"
+            backgroundColor="transparent"
+            color="#fff"
             @tap="closeModal"
           />
         </GridLayout>
-      </ActionBar>
-      <StackLayout class="bg-[#262626] p-4">
-        <Image
-          :src="detection.imageUrl"
-          stretch="aspectFill"
-          height="300"
-        />
+        <Label />
       </StackLayout>
     </Page>
   </Frame>

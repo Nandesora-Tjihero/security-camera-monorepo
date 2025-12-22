@@ -1,5 +1,12 @@
 <script lang="ts" setup>
-  import { onMounted, inject, $navigateTo, Ref, ref } from 'nativescript-vue';
+  import {
+    onMounted,
+    inject,
+    $navigateTo,
+    Ref,
+    ref,
+    computed,
+  } from 'nativescript-vue';
   import { INotificationService } from '~/core/contracts';
 
   import { IAuthService } from '~/core/contracts/auth.contract';
@@ -80,33 +87,34 @@
       $navigateTo(MainLayout, { clearHistory: true });
     }
   };
+
+  const appearance = inject<Ref<string>>('appearance');
+  const isLight = computed(() => appearance?.value === 'Light');
 </script>
 <template>
   <Page
     class=""
     @loaded="onPageLoaded"
+    actionBarHidden="true"
   >
-    <ActionBar class="">
-      <Label
-        text=""
-        class="font-bold text-lg"
-      />
-    </ActionBar>
-
     <GridLayout
-      class="py-10"
+      class="py-40"
       rows="300 * 56 120"
     >
-      <Image src="~/assets/images/owl-mobile-removebg.png" />
-
-      <StackLayout
-        row="0"
-        class="grad-to-bottom"
+      <Image
+        paddingTop="300"
+        src="~/assets/images/owl-mobile-removebg.png"
+        stretch="aspectFill"
       />
 
       <StackLayout
         row="0"
-        class="grad-to-top"
+        :class="isLight ? 'grad-to-bottom' : 'grad-to-bottom-dark'"
+      />
+
+      <StackLayout
+        row="0"
+        :class="isLight ? 'grad-to-top' : 'grad-to-top-dark'"
       />
 
       <Label
@@ -114,7 +122,7 @@
         marginTop="300"
         width="80"
         height="80"
-        class="blue-glow-bg"
+        :class="isLight ? 'blue-glow-bg' : 'blue-glow-bg-dark'"
         horizontalAlignment="center"
         verticalAlignment="center"
       />
@@ -122,7 +130,7 @@
       <GridLayout
         row="0"
         marginTop="270"
-        backgroundColor="#101622"
+        :backgroundColor="isLight ? '#fff' : '#101622'"
         horizontalAlignment="center"
         verticalAlignment="center"
         borderColor="#FFFFFF1A"
@@ -156,7 +164,7 @@
         <FormattedString>
           <Span
             text="Alertas de intrusos "
-            color="#fff"
+            :color="isLight ? '#0f172b' : '#fff'"
           />
           <Span
             text="al instante."
@@ -175,7 +183,7 @@
         paddingLeft="30"
         paddingRight="30"
         textAlignment="center"
-        color="#90A1B9"
+        :color="isLight ? '#62748e' : '#90A1B9'"
       />
 
       <FlexboxLayout
@@ -187,6 +195,9 @@
         marginRight="30"
         class="mb-30 rounded-2xl bg-black text-white dark:bg-black dark:text-black h-16 mx-10"
         borderRadius="10"
+        borderColor="#e2e8f0"
+        borderWidth="2"
+        androidElevation="1"
       >
         <Image
           horizontalAlignment="left"
@@ -213,23 +224,32 @@
   </Page>
 </template>
 <style scoped>
-  /* Gradient 1: Top to Bottom 
-     from-transparent via-transparent to-background-dark (#101622)
-  */
   .grad-to-bottom {
-    background-image: linear-gradient(to bottom, #101622, transparent, #101622);
+    background-image: linear-gradient(
+      to bottom,
+      transparent,
+      transparent,
+      white
+    );
   }
 
-  /* Gradient 2: Bottom to Top 
-     from-background-dark (#101622) via-background-dark/80 to-transparent
-     
-     #101622CC is the 8-digit hex code for your color at 80% opacity.
-  */
   .grad-to-top {
+    background-image: linear-gradient(
+      to top,
+      white,
+      rgba(255, 255, 255, 0.8),
+      transparent
+    );
+  }
+
+  .grad-to-bottom-dark {
+    background-image: linear-gradient(to bottom, #101622, transparent, #101622);
+  }
+  .grad-to-top-dark {
     background-image: linear-gradient(to top, #101622, #101622cc, transparent);
   }
 
-  .blue-glow-bg {
+  .blue-glow-bg-dark {
     box-shadow: 0 0 30px 5px rgba(43, 108, 238, 0.3);
 
     /* IMPORTANT: 
@@ -250,6 +270,34 @@
     );
 
     background-image: linear-gradient(to left, #101622, #101622cc, transparent);
+    border-radius: 100%;
+  }
+
+  .blue-glow-bg {
+    /* 1. Adjusted Shadow:
+          We keep the blue hue but often lower the opacity slightly 
+          in light mode for a cleaner look. 
+    */
+    box-shadow: 0 0 30px 5px rgba(43, 108, 238, 0.25);
+
+    /* 2. Fixed Unit: 
+          Added 'px' to the margin (CSS requires units for non-zero numbers).
+    */
+    margin: 80px;
+
+    /* 3. Background Color:
+          Swapped dark hex #101622 for White #FFFFFF.
+    */
+    background-color: #ffffff;
+
+    /* 4. Gradients:
+          Updated to fade from White (#ffffff) to Transparent.
+          Note: I combined the gradients into one property so both sides fade.
+    */
+    background-image: linear-gradient(to right, #ffffff, #ffffffcc, transparent),
+      linear-gradient(to left, #ffffff, #ffffffcc, transparent);
+
+    /* Ensure the background stays inside the circle */
     border-radius: 100%;
   }
 </style>

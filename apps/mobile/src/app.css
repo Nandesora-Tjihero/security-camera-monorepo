@@ -1,9 +1,8 @@
-@import 'tailwindcss';
-
 @custom-variant dark (&.ns-dark, .ns-dark &);
 @custom-variant light (&.ns-light, .ns-light &);
 @custom-variant ios (&.ns-ios, .ns-ios &);
 @custom-variant android (&.ns-android, .ns-android &);
+
 :root {
   --ui-text-dimmed: var(--color-neutral-400);
   --ui-text-muted: var(--color-neutral-500);
@@ -49,16 +48,6 @@
   --ui-border-inverted: var(--color-white);
 }
 
-/* Add custom classes */
-@layer utilities {
-  .bg-elevated {
-    background-color: var(--ui-bg-elevated);
-  }
-  .bg-dark-elevated {
-    background-color: var(--dark-ui-bg-elevated);
-  }
-}
-
 .fa {
   font-family: FontAwesome, fontawesome-webfont;
 }
@@ -78,7 +67,7 @@
 }
 
 :root {
-  --color-dark: #121212;
+  --color-dark: #101622;
   --dark-primary: var(--color-sky-200);
   --bg-light: white;
   --text-dark: white;
@@ -109,6 +98,10 @@ Label {
     background-color: var(--color-sky-300);
     color: var(--color-black);
   } */
+
+  FlexboxLayout {
+    background-color: var(--color-dark);
+  }
 
   Page {
     background-color: var(--color-dark);

@@ -1,5 +1,6 @@
 import { Ref } from 'nativescript-vue';
-import { ScUser } from '../../../../security-camera/core/models/user.model';
+
+export interface ScUser {}
 
 export interface IAuthService {
   user: Ref<ScUser | null>;

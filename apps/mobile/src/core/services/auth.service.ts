@@ -1,9 +1,7 @@
-import { ScUser } from '../../../../security-camera/core/models/user.model';
-
 import { firebase } from '@nativescript/firebase-core';
 import { GoogleAuthProvider, User, Auth } from '@nativescript/firebase-auth';
 import { GoogleSignin } from '@nativescript/google-signin';
-import { IAuthService } from '../contracts/auth.contract';
+import { IAuthService, ScUser } from '../contracts/auth.contract';
 import { ref } from 'nativescript-vue';
 
 export class AuthServiceGoogle implements IAuthService {

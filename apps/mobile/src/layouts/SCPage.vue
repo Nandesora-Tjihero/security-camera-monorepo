@@ -1,6 +1,11 @@
 <script setup lang="ts">
   import { Drawer } from '@nativescript-community/ui-drawer';
-  import { ApplicationSettings } from '@nativescript/core';
+  import {
+    ApplicationSettings,
+    EventData,
+    LoadEventData,
+    SegmentedBar,
+  } from '@nativescript/core';
 
   import Auth from '~/pages/auth.vue';
 
@@ -11,6 +16,7 @@
     ref,
     onMounted,
     Ref,
+    computed,
   } from 'nativescript-vue';
   import { IAuthService } from '~/core/contracts';
 
@@ -47,6 +53,7 @@
   ];
 
   const appearance = inject<Ref<string>>('appearance');
+  const isLight = computed(() => appearance?.value === 'Light');
 
   const drawer = ref<Drawer>();
 
@@ -55,8 +62,6 @@
     if (appearance) {
       appearance.value = ApplicationSettings.getString('appearance', 'Light');
     }
-    console.log('Appearance changed to:', appearance?.value);
-    // Here you can add logic to actually change the app's appearance
   };
 
   const handleSignOut = async () => {
@@ -73,12 +78,19 @@
       console.error('Error during sign out:', error);
     }
   };
+
   const emits = defineEmits<{
     (e: 'update:drawerClose'): void;
   }>();
+
+  const handleSelectedIndexChange = (args: EventData) => {
+    const segmentedBar = args.object as SegmentedBar;
+
+    handleAppearanceChange(segmentedBar.selectedIndex ? 'Dark' : 'Light');
+  };
 </script>
 <template>
-  <Page :class="appearance && appearance === 'Dark' ? 'ns-dark' : 'ns-light'">
+  <Page :class="appearance && isLight ? 'ns-dark' : 'ns-light'">
     <ActionBar class="bg-sky-700 dark:bg-black">
       <slot name="actionBarContent" />
     </ActionBar>
@@ -91,67 +103,118 @@
         failOffsetYEnd: 10,
       }"
     >
-      <StackLayout
+      <GridLayout
         ~rightDrawer
-        class="w-4/5 bg-white dark:bg-[#262626] h-full"
+        class="w-4/5 bg-white dark:bg-[#262626] h-full rounded-left-side"
+        :backgroundColor="isLight ? '#fff' : '#101622'"
+        width="300"
+        rows="auto * auto"
       >
-        <GridLayout
-          columns="auto *"
-          rows="auto"
-          class="p-4 dark:bg-[#262626] border-b border-gray-400 dark:border-gray-400"
-        >
-          <Label
-            text="Appearance"
-            textWrap="true"
-            class="text-[#121212] dark:text-white"
-          />
-          <StackLayout
-            col="1"
-            orientation="horizontal"
-            class=""
+        <StackLayout row="2">
+          <GridLayout
+            margin="20"
+            columns="auto"
+            rows="auto auto"
+            class="p-4 dark:bg-[#262626] border-b border-gray-400 dark:border-gray-400"
           >
-            <Button
+            <Label
+              text="Appearance"
+              textWrap="true"
+              class="text-[#121212] dark:text-white"
+              color="rgb(144, 161, 185)"
+              textTransform="uppercase"
+              fontWeight="500"
+              fontSize="12"
+            />
+            <GridLayout
+              height="40"
+              marginTop="10"
+              padding="3"
+              row="1"
+              columns="*"
+              orientation="horizontal"
+              width="100%"
+              class=""
+              :backgroundColor="isLight ? 'rgb(0, 89, 138)' : 'rgb(0, 89, 138)'"
+            >
+              <SegmentedBar
+                color="#fff"
+                @selectedIndexChanged="handleSelectedIndexChange"
+                selectedBackgroundColor="rgb(0, 166, 244)"
+                :backgroundColor="
+                  isLight ? 'rgb(0, 89, 138)' : 'rgb(0, 89, 138)'
+                "
+                selectedTextColor="#fff"
+                borderRadius="32"
+              >
+                <SegmentedBarItem
+                  title="&#xf185;"
+                  color="#fff"
+                  borderRadius="12"
+                  class="fas"
+                />
+                <SegmentedBarItem
+                  title="&#xf186;"
+                  color="#fff"
+                  class="fas"
+                />
+              </SegmentedBar>
+              <!-- <Button
+              borderRadius="8"
               text="&#xf185;"
               androidElevation="0"
+              color="#fff"
               class="fas m-2 bg-transparent text-[#121212] dark:text-white"
-              :class="
-                appearance === 'Light'
-                  ? 'border-b-4 border-sky-500'
-                  : 'border-0'
-              "
+              :class="isLight ? 'border-b-4 border-sky-500' : 'border-0'"
               @tap="handleAppearanceChange('Light')"
+              :backgroundColor="isLight ? 'rgb(0, 166, 244)' : 'transparent'"
             />
 
             <Button
+              color="#fff"
+              borderRadius="8"
+              col="1"
               text="&#xf186;"
               androidElevation="0"
               class="fas m-2 bg-transparent border-0 text-[#121212] dark:text-white"
-              :class="
-                appearance === 'Dark'
-                  ? 'border-b-4 dark:border-sky-500'
-                  : ' border-0'
-              "
+              :class="isLight ? 'border-b-4 dark:border-sky-500' : ' border-0'"
               @tap="handleAppearanceChange('Dark')"
+              :backgroundColor="isLight ? 'transparent' : 'rgb(0, 166, 244)'"
+            /> -->
+            </GridLayout>
+          </GridLayout>
+
+          <StackLayout
+            rows=""
+            columns=""
+            class="p-4 border-b border-gray-400 dark:bg-[#262626]"
+            borderTopWidth="1"
+            borderTopColor="rgba(0, 0, 0, 0.1)"
+            paddingLeft="10"
+            paddingRight="20"
+          >
+            <Button
+              col="1"
+              backgroundColor="transparent"
+              horizontalAlignment="left"
+              textTransform="none"
+              :color="isLight ? '#262626' : '#F0F4F8'"
+              text="&#xf2f5; Sign Out"
+              fontWeight="400"
+              androidElevation="0"
+              class="fas m-2 bg-transparent border-0 text-[#121212] dark:text-white"
+              @tap="handleSignOut"
             />
           </StackLayout>
-        </GridLayout>
-
-        <StackLayout
-          rows=""
-          columns=""
-          class="p-4 border-b border-gray-400 dark:bg-[#262626]"
-        >
-          <Button
-            col="1"
-            text="Sign Out &#xf2f5;"
-            androidElevation="0"
-            class="fas m-2 bg-transparent border-0 text-[#121212] dark:text-white"
-            @tap="handleSignOut"
-          />
         </StackLayout>
-      </StackLayout>
+      </GridLayout>
 
       <slot />
     </Drawer>
   </Page>
 </template>
+<style lang="css" scoped>
+  .rounded-left-side {
+    border-radius: 16 0 0 16;
+  }
+</style>
