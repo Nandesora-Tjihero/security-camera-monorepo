@@ -1,19 +1,27 @@
 <template>
-  <section id="hero">
-    <UContainer class="max-w-2xl flex flex-col gap-5">
-      <h1 class="text-5xl md:text-7xl text-white pt-10">
+  <section
+    id="hero"
+    class="relative min-h-screen flex items-center"
+  >
+    <UContainer
+      class="max-w-3xl flex justify-center items-center flex-col text-center h-full"
+    >
+      <h1 class="text-5xl md:text-7xl text-white mb-4 font-bold">
         Protege tus pertenencias a bajo coste
       </h1>
 
-      <h2 class="text-xl leading-normal text-white">
+      <h2 class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
         Usa el telefono extra que tienes en casa como camara de seguridad
         inteligente. Recibe alertas en tiempo real y accede a las grabaciones
         desde cualquier lugar.
       </h2>
-      <BaseLoadingIndicator v-if="loadingModel && !canSignIn" />
+
+      <ClientOnly>
+        <BaseLoadingIndicator v-if="loadingModel && !canSignIn" />
+      </ClientOnly>
 
       <UButton
-        v-show="canSignIn"
+        v-if="canSignIn"
         :variant="buttonConfig.variant"
         @click="handleButtonClick"
         class="w-fit inline-block p-2 content-center"

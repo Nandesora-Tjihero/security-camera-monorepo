@@ -15,10 +15,11 @@
     "@google-cloud/functions-framework": "^3.4.2",
     "@nuxt/fonts": "^0.11.4",
     "@nuxt/image": "^1.11.0",
-    "@nuxt/ui": "^2.22.3",
+    "@nuxt/ui": "^4.2.1",
     "@nuxtjs/tailwindcss": "^6.12.1",
     "@sentry/nuxt": "^10.22.0",
     "@stripe/stripe-js": "^4.4.0",
+    "@tailwindcss/vite": "^4.1.17",
     "@tensorflow-models/coco-ssd": "^2.2.3",
     "@tensorflow/tfjs": "^4.20.0",
     "@tensorflow/tfjs-backend-cpu": "^4.20.0",
@@ -36,6 +37,7 @@
     "nuxt": "^4.2.0",
     "nuxt-storage": "^1.2.2",
     "stripe": "^16.10.0",
+    "tailwindcss": "^4.1.17",
     "vue": "latest"
   },
   "devDependencies": {

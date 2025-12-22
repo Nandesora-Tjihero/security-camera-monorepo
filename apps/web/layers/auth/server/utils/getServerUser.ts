@@ -13,7 +13,7 @@ export async function getServerUser(event: H3Event) {
   if (!idToken) return null;
 
   try {
-    const decodedClaims = await getAuth(firebaseApp).verifyIdToken(
+    const decodedClaims = await getAuth(firebaseApp).verifySessionCookie(
       idToken,
       true
     );

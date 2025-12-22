@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loadingModel && !canSignIn">
+  <div>
     <!-- <label class="text-sky-500 z-10"
           >Checking service availability...</label
         > -->
@@ -9,7 +9,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-  const { canSignIn } = useUserCanSignIn();
-</script>

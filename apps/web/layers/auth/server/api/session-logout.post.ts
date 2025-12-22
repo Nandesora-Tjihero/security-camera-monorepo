@@ -1,5 +1,5 @@
 export default defineEventHandler((event) => {
-  deleteCookie(event, 'session');
+  deleteCookie(event, 'id_token');
 
   return { status: 'success' };
 });

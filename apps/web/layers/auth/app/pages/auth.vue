@@ -1,6 +1,8 @@
 <template>
   <NuxtErrorBoundary>
-    <UContainer class="flex flex-col p-10 items-center h-full">
+    <UContainer
+      class="wrapper flex flex-col items-center justify-center h-[calc(100vh-var(--ui-header-height))]"
+    >
       <BaseHeading
         class="mb-10"
         data-testid="auth-page"
@@ -11,7 +13,7 @@
 
       <UButton
         @click="signInWithGoogle"
-        class="!bg-black dark:!bg-white"
+        class="bg-black! dark:bg-white!"
         data-testid="google-signin-btn"
         >Sign In with Google</UButton
       >
@@ -44,6 +46,8 @@
   const databaseService = getDatabaseService();
 
   const billingService = getBillingService();
+
+  const toast = useToast();
 
   const resetError = (error: any) => {
     error.value = null;
@@ -112,6 +116,10 @@
           body: JSON.stringify({
             idToken: await userFromGoogleAuth.getIdToken(),
           }),
+          onRequestError: (error) => {
+            console.error('Error during session login:', error);
+            throw error;
+          },
         });
         setUser(userFromDB!); // this triggers the watch above to get subscription from db
       } else {
@@ -119,6 +127,18 @@
       }
     } catch (error) {
       console.error('Error during authentication:', error);
+      toast.add({
+        color: 'error',
+        title: 'Authentication Error',
+        description:
+          'There was an error during sign-in. Please try again. ' +
+          (error as Error).message,
+      });
     }
   };
 </script>
+<style scoped>
+  .wrapper {
+    margin-top: var(--ui-header-height);
+  }
+</style>

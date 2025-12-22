@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UDropdown
+    <UDropdownMenu
       ref="dropdown"
       id="userDropdown"
       v-if="user"
@@ -10,18 +10,21 @@
       :popper="{ placement: 'bottom-start', arrow: false }"
     >
       <UButton
-        class="!bg-primary-500 text-white"
+        class="bg-primary-500! text-white"
         color="white"
         :label="user.displayName as string || user.email as string"
         trailing-icon="i-heroicons-chevron-down-20-solid"
       />
-    </UDropdown>
-    <BaseLoadingIndicator v-if="loadingModel && !canSignIn" />
+    </UDropdownMenu>
+    <ClientOnly>
+      <BaseLoadingIndicator v-if="loadingModel && !canSignIn" />
+    </ClientOnly>
 
     <ULink
       v-if="canSignIn"
       @click.prevent="goToLogin"
-      >Login</ULink
+      class="text-highlighted"
+      >Sign In</ULink
     >
   </div>
 </template>
@@ -46,18 +49,16 @@
     }
   };
 
-  const options = [
-    [
-      {
-        label: 'Billing',
-        click: () => navigateTo('/subscriptions'),
-      },
-      {
-        label: 'Sign Out',
-        click: signOut,
-      },
-    ],
-  ];
+  const options = computed<NavigationMenuItem[]>(() => [
+    {
+      label: 'Billing',
+      click: () => navigateTo('/subscriptions'),
+    },
+    {
+      label: 'Sign Out',
+      onSelect: signOut,
+    },
+  ]);
 
   // user can sign in if they are not logged in, the model is loaded, and camera is supported
   const { user } = useUser();

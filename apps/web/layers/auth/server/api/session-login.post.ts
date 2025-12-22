@@ -14,7 +14,7 @@ export default defineEventHandler(async (event) => {
     }
   );
 
-  setCookie(event, 'session', sessionCookie, {
+  setCookie(event, 'id_token', sessionCookie, {
     httpOnly: true,
     // secure: process.env.NODE_ENV === 'production',
     maxAge: expiresIn / 1000,

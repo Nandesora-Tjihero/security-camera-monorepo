@@ -1,7 +1,7 @@
 <template>
   <section
     ref="demos"
-    class="max-w-[640px] mx-auto max-sm:px-5 py-5"
+    class="max-w-[640px] mx-auto max-sm:px-5 py-5 h-[calc(100vh-var(--ui-header-height))] mt-[var(--ui-header-height)]"
   >
     <BaseHeading
       class=""

@@ -10,8 +10,8 @@ export default defineNuxtConfig({
   vite: {
     // server: { watch: { usePolling: true, interval: 150 } },
   },
-
-  modules: ['@nuxt/test-utils/module'],
+  css: ['~/assets/css/main.css'],
+  modules: ['@nuxt/test-utils/module', '@nuxt/ui'],
 
   runtimeConfig: {
     public: {
