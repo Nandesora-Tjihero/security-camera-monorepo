@@ -1,15 +1,12 @@
 const { onObjectFinalized } = require('firebase-functions/v2/storage');
-const { getFirestore, Timestamp } = require('firebase-admin/firestore');
-const { getMessaging } = require('firebase-admin/messaging');
-const { getStorage } = require('firebase-admin/storage');
+const { Timestamp } = require('firebase-admin/firestore');
+const { db, messaging, storage } = require('../firebase');
 
 const { defineString } = require('firebase-functions/params');
 
 const REGION = defineString('FUNCTIONS_REGION');
 const BUCKET_NAME = defineString('STORAGE_BUCKET');
-const db = getFirestore();
-const messaging = getMessaging();
-const storage = getStorage();
+
 
 exports.onDetectionImageUploaded = onObjectFinalized({
   region: REGION,
@@ -19,7 +16,10 @@ exports.onDetectionImageUploaded = onObjectFinalized({
 }, async (event) => {
   const object = event.data;
   const [_, userId, fileName] = object.name.split('/');
-  const file = storage.bucket().file(object.name);
+  // In tests, we need to explicitly access the bucket defined in .env or passed to firebase-functions-test
+  // In production with no args, it uses the default bucket.
+  const bucketInstance = process.env.STORAGE_BUCKET ? storage.bucket(process.env.STORAGE_BUCKET) : storage.bucket();
+  const file = bucketInstance.file(object.name);
 
   console.log(`📸 New detection image uploaded for user: ${userId}`);
 

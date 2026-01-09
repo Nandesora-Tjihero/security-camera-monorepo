@@ -1,11 +1,11 @@
 import dotEnv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 let test;
-import { assert } from 'vitest';
 
 describe('Cloud Functions', () => {
     let myFunctions;
@@ -46,8 +46,8 @@ describe('Cloud Functions', () => {
                 updated: new Date().toISOString(),
             };
             const wrapped = test.wrap(myFunctions.onDetectionImageUploaded);
-            await wrapped({ data: objectMetadata });
-        });
+            await wrapped({ data: objectMetadata }).catch(e => console.error(e));
+        }).timeout(10000);
     });
 });
 

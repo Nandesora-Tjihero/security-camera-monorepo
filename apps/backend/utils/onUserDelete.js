@@ -1,5 +1,5 @@
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
+const { db } = require('../firebase');
 
 exports.removeFromFirestore = functions
     .region('europe-west1')
@@ -8,7 +8,7 @@ exports.removeFromFirestore = functions
         console.log('User deleted:', user.uid);
 
         try {
-            await admin.firestore().collection('users').doc(user.uid).delete();
+            await db.collection('users').doc(user.uid).delete();
             console.log(`Deleted Firestore document for user ${user.uid}`);
         } catch (error) {
             console.error('Error deleting Firestore document:', error);
