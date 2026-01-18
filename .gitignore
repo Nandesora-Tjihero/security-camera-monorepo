@@ -1,3 +1,5 @@
 security-camera-a413e-firebase-adminsdk-fbsvc-9239d5d459.json
 node_modules/
-.envoptimization_candidates.html
+.env
+apps/web/optimization_candidates.html
+apps/mobile/optimization_candidates.html
