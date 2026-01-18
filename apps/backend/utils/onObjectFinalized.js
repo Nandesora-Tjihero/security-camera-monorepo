@@ -16,6 +16,7 @@ exports.onDetectionImageUploaded = onObjectFinalized({
 }, async (event) => {
   const object = event.data;
   const [_, userId, fileName] = object.name.split('/');
+  
   // In tests, we need to explicitly access the bucket defined in .env or passed to firebase-functions-test
   // In production with no args, it uses the default bucket.
   const bucketInstance = process.env.STORAGE_BUCKET ? storage.bucket(process.env.STORAGE_BUCKET) : storage.bucket();
@@ -42,13 +43,8 @@ exports.onDetectionImageUploaded = onObjectFinalized({
     }
 
     const detectionsRef = db.collection('users').doc(userId).collection('detections');
-    const existing = await detectionsRef.where('fileName', '==', fileName).limit(1).get();
-
-    if (!existing.empty) {
-      console.log(`🟡 Detection ${fileName} already exists. Skipping duplicate.`);
-      return;
-    }
-
+    
+    // Optimization: Use fileName as Doc ID to prevent duplicates without reading first (Idempotent Write)
     const detectionData = {
       filePath: object.name,
       fileName,
@@ -58,7 +54,7 @@ exports.onDetectionImageUploaded = onObjectFinalized({
     };
 
     await Promise.all([
-      detectionsRef.add(detectionData),
+      detectionsRef.doc(fileName).set(detectionData),
       sendPushNotification(token, imageUrl),   // notify device
     ]);
 

@@ -16,6 +16,14 @@ describe('Cloud Functions', () => {
         // and myFunctions.addMessage
         // load .env explicitly from project root (adjust path if needed)
         dotEnv.config({ path: path.join(__dirname, '..', '..', '.env') });
+        dotEnv.config({ path: path.join(__dirname, '..', '.env') });
+
+        // Unset emulator variables to ensure we use the provided credentials (online mode)
+        // This fixes the "ECONNREFUSED" error when emulators are not running during commit
+        delete process.env.FIRESTORE_EMULATOR_HOST;
+        delete process.env.FIREBASE_AUTH_EMULATOR_HOST;
+        delete process.env.FIREBASE_STORAGE_EMULATOR_HOST;
+        delete process.env.PUBSUB_EMULATOR_HOST;
 
         // dynamic import so dotenv runs first (ESM imports are hoisted otherwise)
         const firebaseFunctionsTest = (await import('firebase-functions-test')).default;
