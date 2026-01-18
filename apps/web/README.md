@@ -4,6 +4,8 @@
 
 This is a Nuxt 3 web app that turns a spare device into a home security camera. A user uses this web app for monitoring and a companion mobile app for receiving notifications.
 
+> 📘 **Documentation**: For a detailed breakdown of the requirements and specifications that drove this implementation, see [PROJECT_REQUIREMENTS.md](../../PROJECT_REQUIREMENTS.md).
+
 The web app consists of the following high-level architecture and flow:
 
 1. User signs in with Firebase Auth (initialization lives in `plugins/01.firebaseInit.ts`).
