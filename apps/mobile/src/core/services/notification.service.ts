@@ -21,8 +21,6 @@ export class FirebaseNotificationService implements INotificationService {
       authStatus === AuthorizationStatus.PROVISIONAL;
 
     if (enabled) {
-      console.log('Authorization status:', authStatus);
-
       const didRegister = await firebase()
         .messaging()
         .registerDeviceForRemoteMessages();

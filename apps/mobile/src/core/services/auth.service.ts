@@ -37,7 +37,6 @@ export class AuthServiceGoogle implements IAuthService {
       const userCredential = await firebase()
         .auth()
         .signInWithCredential(credential);
-      console.log('User signed in with Google:', userCredential.user?.email);
 
       return this.convertToScUser(userCredential.user);
     } catch (error: any) {

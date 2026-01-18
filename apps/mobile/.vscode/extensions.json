@@ -1,3 +1,7 @@
 {
-  "recommendations": ["nativescript.nativescript", "vue.volar"]
+  "recommendations": [
+    "nativescript.nativescript",
+    "vue.volar",
+    "esbenp.prettier-vscode"
+  ]
 }

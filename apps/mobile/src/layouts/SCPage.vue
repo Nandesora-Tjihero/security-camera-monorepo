@@ -1,102 +1,90 @@
 <script setup lang="ts">
-  import { Drawer } from '@nativescript-community/ui-drawer';
-  import {
-    ApplicationSettings,
-    EventData,
-    LoadEventData,
-    SegmentedBar,
-  } from '@nativescript/core';
+import { Drawer } from "@nativescript-community/ui-drawer";
+import { EventData, LoadEventData, SegmentedBar } from "@nativescript/core";
 
-  import Auth from '~/pages/auth.vue';
+import Auth from "~/pages/auth.vue";
+import { usePreferences } from "~/utils/usePreferences";
 
-  import {
-    watch,
-    $navigateTo,
-    inject,
-    ref,
-    onMounted,
-    Ref,
-    computed,
-  } from 'nativescript-vue';
-  import { IAuthService } from '~/core/contracts';
+import {
+  watch,
+  $navigateTo,
+  inject,
+  ref,
+  onMounted,
+  Ref,
+  computed,
+} from "nativescript-vue";
+import { IAuthService } from "~/core/contracts";
 
-  const props = defineProps<{
-    drawerOpen: boolean;
-  }>();
+const props = defineProps<{
+  drawerOpen: boolean;
+}>();
 
-  watch(
-    () => props.drawerOpen,
-    (newVal) => {
-      console.log('drawerOpen changed:', newVal);
-      if (newVal) {
-        console.log('opening drawer', drawer.value?.nativeView);
-        drawer.value?.nativeView.open('right');
-      } else {
-        console.log('closing drawer');
-        drawer.value?.nativeView.close();
-      }
-    }
-  );
-
-  onMounted(() => {
-    console.log('SCDrawer mounted, initial drawerOpen:', props.drawerOpen);
-    if (props.drawerOpen) {
-      drawer.value?.nativeView.open('right');
-    }
-  });
-
-  const authService = inject<IAuthService>('authService') as IAuthService;
-
-  const appearanceOptions = [
-    { value: 'Light', label: 'Light', icon: '&#xf185;' },
-    { value: 'Dark', label: 'Dark', icon: '&#xf186;' },
-  ];
-
-  const appearance = inject<Ref<string>>('appearance');
-  const isLight = computed(() => appearance?.value === 'Light');
-
-  const drawer = ref<Drawer>();
-
-  const handleAppearanceChange = (value: string) => {
-    ApplicationSettings.setString('appearance', value);
-    if (appearance) {
-      appearance.value = ApplicationSettings.getString('appearance', 'Light');
-    }
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await authService.signOut();
-      ApplicationSettings.remove('userId');
-      authService.user.value = null;
-      console.log('User signed out successfully o');
+watch(
+  () => props.drawerOpen,
+  (newVal) => {
+    if (newVal) {
+      drawer.value?.nativeView.open("right");
+    } else {
       drawer.value?.nativeView.close();
-
-      $navigateTo(Auth, { clearHistory: true });
-      // Optionally, navigate back to the auth page or perform other actions
-    } catch (error) {
-      console.error('Error during sign out:', error);
     }
-  };
+  }
+);
 
-  const emits = defineEmits<{
-    (e: 'update:drawerClose'): void;
-  }>();
+onMounted(() => {
+  if (props.drawerOpen) {
+    drawer.value?.nativeView.open("right");
+  }
+});
 
-  const handleSelectedIndexChange = (args: EventData) => {
-    const segmentedBar = args.object as SegmentedBar;
+const authService = inject<IAuthService>("authService") as IAuthService;
+const preferences = usePreferences();
 
-    handleAppearanceChange(segmentedBar.selectedIndex ? 'Dark' : 'Light');
-  };
+const isLight = inject<Ref<boolean>>("isLight")!;
+
+const drawer = ref<Drawer>();
+
+const handleAppearanceChange = (value: string) => {
+  preferences.setAppearance(value);
+  isLight.value = value === "Light";
+};
+
+const handleSignOut = async () => {
+  try {
+    await authService.signOut();
+    preferences.clearUser();
+    authService.user.value = null;
+
+    drawer.value?.nativeView.close();
+
+    $navigateTo(Auth, { clearHistory: true });
+    // Optionally, navigate back to the auth page or perform other actions
+  } catch (error) {
+    console.error("Error during sign out:", error);
+  }
+};
+
+const emits = defineEmits<{
+  (e: "update:drawerClose"): void;
+}>();
+
+const handleSelectedIndexChange = (args: EventData) => {
+  const segmentedBar = args.object as SegmentedBar;
+  handleAppearanceChange(segmentedBar.selectedIndex ? "Dark" : "Light");
+};
 </script>
 <template>
-  <Page :class="appearance && isLight ? 'ns-dark' : 'ns-light'">
-    <ActionBar class="bg-sky-700 dark:bg-black">
+  <Page :class="isLight ? 'ns-light' : 'ns-dark'">
+    <ActionBar
+      class="bg-sky-700 dark:bg-black"
+      :backgroundColor="isLight ? '#fff' : '#101622'"
+    >
       <slot name="actionBarContent" />
     </ActionBar>
 
     <Drawer
       ref="drawer"
+      :backgroundColor="isLight ? '#fff' : '#101622'"
       @close="emits('update:drawerClose')"
       :gestureHandlerOptions="{
         failOffsetYStart: -10,
@@ -138,6 +126,7 @@
               :backgroundColor="isLight ? 'rgb(0, 89, 138)' : 'rgb(0, 89, 138)'"
             >
               <SegmentedBar
+                :selectedIndex="isLight ? 0 : 1"
                 color="#fff"
                 @selectedIndexChanged="handleSelectedIndexChange"
                 selectedBackgroundColor="rgb(0, 166, 244)"
@@ -153,34 +142,8 @@
                   borderRadius="12"
                   class="fas"
                 />
-                <SegmentedBarItem
-                  title="&#xf186;"
-                  color="#fff"
-                  class="fas"
-                />
+                <SegmentedBarItem title="&#xf186;" color="#fff" class="fas" />
               </SegmentedBar>
-              <!-- <Button
-              borderRadius="8"
-              text="&#xf185;"
-              androidElevation="0"
-              color="#fff"
-              class="fas m-2 bg-transparent text-[#121212] dark:text-white"
-              :class="isLight ? 'border-b-4 border-sky-500' : 'border-0'"
-              @tap="handleAppearanceChange('Light')"
-              :backgroundColor="isLight ? 'rgb(0, 166, 244)' : 'transparent'"
-            />
-
-            <Button
-              color="#fff"
-              borderRadius="8"
-              col="1"
-              text="&#xf186;"
-              androidElevation="0"
-              class="fas m-2 bg-transparent border-0 text-[#121212] dark:text-white"
-              :class="isLight ? 'border-b-4 dark:border-sky-500' : ' border-0'"
-              @tap="handleAppearanceChange('Dark')"
-              :backgroundColor="isLight ? 'transparent' : 'rgb(0, 166, 244)'"
-            /> -->
             </GridLayout>
           </GridLayout>
 
@@ -214,7 +177,7 @@
   </Page>
 </template>
 <style lang="css" scoped>
-  .rounded-left-side {
-    border-radius: 16 0 0 16;
-  }
+.rounded-left-side {
+  border-radius: 16 0 0 16;
+}
 </style>

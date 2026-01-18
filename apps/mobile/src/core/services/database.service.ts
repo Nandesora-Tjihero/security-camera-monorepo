@@ -75,9 +75,6 @@ export class FirestoreDatabaseService implements IDatabaseService {
         .update({
           tokens: FieldValue.arrayUnion([data.token]),
         });
-      console.log(
-        `Token ${data.token} saved to database for user ${data.userId}.`
-      );
     } catch (error) {
       console.error('Error saving token to database:', error);
     }
@@ -88,7 +85,6 @@ export class FirestoreDatabaseService implements IDatabaseService {
 
     try {
       detections = await this.getUserById(userId);
-      console.log('detections:', detections);
     } catch (error) {
       console.error('Error retrieving user detections: ', error);
     }

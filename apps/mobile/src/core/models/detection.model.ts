@@ -1,6 +1,7 @@
 export interface IDetection {
   id: string;
-  imageUrl: string;
+  filePath: string;
   timestamp: string;
   fileName: string;
+  imageUrl?: string;
 }

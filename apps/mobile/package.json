@@ -10,6 +10,7 @@
     "@nativescript/firebase-core": "^5.0.2",
     "@nativescript/firebase-firestore": "^5.0.2",
     "@nativescript/firebase-messaging": "^5.0.2",
+    "@nativescript/firebase-storage": "^5.0.2",
     "@nativescript/google-signin": "^2.1.1",
     "@nativescript/theme": "^3.1.0",
     "nativescript-vue": "3.0.1"

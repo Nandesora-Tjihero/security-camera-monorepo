@@ -1,6 +1,10 @@
 import { Ref } from 'nativescript-vue';
 
-export interface ScUser {}
+export interface ScUser {
+  uid: string;
+  email: string;
+  displayName: string;
+}
 
 export interface IAuthService {
   user: Ref<ScUser | null>;

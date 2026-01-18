@@ -1,23 +1,23 @@
-import { computed, createApp, ref, registerElement } from 'nativescript-vue';
+import { createApp, ref, registerElement } from "nativescript-vue";
 
 registerElement(
-  'GoogleSignInButton',
-  () => require('@nativescript/google-signin').GoogleSignInButton
+  "GoogleSignInButton",
+  () => require("@nativescript/google-signin").GoogleSignInButton
 );
 
-import index from './pages/index.vue';
-import '@nativescript/firebase-messaging';
-import '@nativescript/firebase-auth';
+import index from "./pages/index.vue";
+import "@nativescript/firebase-messaging";
+import "@nativescript/firebase-auth";
 
-import { firebaseUtils } from './utils/firebaseHelpers';
-import { initServices } from './boot/services';
-import { usePreferences } from './boot/usePreferences';
+import { firebaseUtils } from "./utils/firebaseHelpers";
+import { initServices } from "./boot/services";
+import { usePreferences } from "./utils/usePreferences";
 
-import DrawerPlugin from '@nativescript-community/ui-drawer/vue3';
+import DrawerPlugin from "@nativescript-community/ui-drawer/vue3";
 
-import { initFirebase } from './boot/firebase';
-import { firebase } from '@nativescript/firebase-core';
-import { IDetection } from './core/models';
+import { initFirebase } from "./boot/firebase";
+import { firebase } from "@nativescript/firebase-core";
+import { IDetection } from "./core/models";
 
 try {
   await initFirebase();
@@ -33,13 +33,10 @@ try {
     } else {
       prefs.setUserId(user.uid);
       authService.user.value = authService.convertToScUser(user);
-      console.log('User is signed in!');
     }
   });
 
-  firebaseUtils.handleDeviceTokenChange((token) => {
-    console.log('Device token changed:', token);
-  });
+  firebaseUtils.handleDeviceTokenChange((token) => {});
 
   const auth = firebase().auth();
 
@@ -49,7 +46,7 @@ try {
     const detectionsRef = firebase()
       .firestore()
       .collection(`users/${auth.currentUser.uid}/detections`)
-      .orderBy('timestamp', 'desc')
+      .orderBy("timestamp", "desc")
       .limit(5);
 
     detectionsRef.onSnapshot(
@@ -59,26 +56,29 @@ try {
           ...doc.data(),
           seconds: doc.data().timestamp.nanoseconds,
         }));
-        console.log('tss', data[0]?.timestamp.seconds);
+
         detections.value = data;
       },
       (err) => {
-        console.log(`snapshot`, err);
+        console.error(`snapshot`, err);
       }
     );
   }
 
   const app = createApp(index);
 
+  const isLight = ref(prefs.getAppearance() === "Light");
+
   app
-    .provide('authService', authService)
-    .provide('databaseService', databaseService)
-    .provide('notificationService', notificationService)
-    .provide('detections', detections)
-    .provide('appearance', ref(prefs.getAppearance()))
+    .provide("authService", authService)
+    .provide("databaseService", databaseService)
+    .provide("notificationService", notificationService)
+    .provide("detections", detections)
+    .provide("isLight", isLight)
+    .provide("appearance", ref(prefs.getAppearance()))
     .use(DrawerPlugin);
 
   app.start();
 } catch (error) {
-  console.error('App initialization failed:', error);
+  console.error("App initialization failed:", error);
 }
