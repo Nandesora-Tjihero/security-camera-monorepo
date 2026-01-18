@@ -5,5 +5,7 @@ export default defineNuxtPlugin((nuxApp) => {
   };
 
   const functions = getFunctions(app.app);
-  // connectFunctionsEmulator(functions, '127.0.0.1', 5001);
+  if (import.meta.client && location.hostname === 'localhost') {
+    connectFunctionsEmulator(functions, '127.0.0.1', 5001);
+  }
 });

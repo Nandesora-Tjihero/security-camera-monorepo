@@ -7,6 +7,7 @@ export default defineEventHandler(async (event) => {
   // Create session cookie valid for, e.g., 7 days
   const expiresIn = 7 * 24 * 60 * 60 * 1000;
 
+  console.log('idToken', idToken);
   const sessionCookie = await getAuth(firebaseApp).createSessionCookie(
     idToken,
     {

@@ -14,7 +14,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   const { auth } = nuxtApp.$firebase as {
     auth: ReturnType<typeof import('firebase/auth').getAuth>;
   };
-  // connectAuthEmulator(auth, 'http://127.0.0.1:9099');
+  connectAuthEmulator(auth, 'http://127.0.0.1:9099');
 
   async function signInWithGoogle() {
     const provider = new GoogleAuthProvider();

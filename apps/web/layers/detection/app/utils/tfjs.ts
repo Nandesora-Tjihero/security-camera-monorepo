@@ -29,7 +29,7 @@ export async function loadModel() {
 }
 
 export function getTfjsDetector(
-  detectionCooldownMs: number,
+  detectionCooldownMs = 5000,
   confidenceThreshold = 0.66
 ): IDetectionService {
   let requestAnimationFrameId: number | null = null;

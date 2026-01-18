@@ -5,7 +5,7 @@ import {
   connectStorageEmulator,
   type FirebaseStorage,
 } from 'firebase/storage';
-import type { IStorageService } from '~/core/contracts';
+import type { IStorageService } from '#shared/core/contracts';
 
 const EMULATOR_HOST = '127.0.0.1';
 const EMULATOR_PORT = 9199;
@@ -26,12 +26,12 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     console.log(
       `🔌 Connecting Storage to emulator: ${EMULATOR_HOST}:${EMULATOR_PORT} for project ${storage.app.options.projectId}`
     );
-    // connectStorageEmulator(storage, EMULATOR_HOST, EMULATOR_PORT);
+    connectStorageEmulator(storage, EMULATOR_HOST, EMULATOR_PORT);
   }
 
   const uploadImage: IStorageService['uploadImage'] = async (
-    userId,
-    imageData
+    userId: string,
+    imageData: File
   ) => {
     const fileBaseName = `detection_${Date.now()}`;
     let uploadedFileLocation = '';
@@ -52,8 +52,8 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   };
 
   const getImageUrl: IStorageService['getImageUrl'] = async (
-    userId,
-    imageName
+    userId: string,
+    imageName: string
   ) => {
     const fileRef = createFilePathRef(storage, userId, imageName);
 

@@ -23,7 +23,9 @@ const clientFirestoreAdapter: FirestoreAdapter = {
 };
 export default defineNuxtPlugin((nuxtApp) => {
   const firestore = (nuxtApp.$firebase as { firestore: any }).firestore;
-  //connectFirestoreEmulator(firestore, '127.0.0.1', 8080);
+  if (import.meta.client && location.hostname === 'localhost') {
+    connectFirestoreEmulator(firestore, '127.0.0.1', 8080);
+  }
 
   const dB = firestoreDB(firestore, clientFirestoreAdapter);
 
