@@ -28,6 +28,8 @@ When the web app detects a person:
 
 To run the backend logic locally, use the Firebase Emulators.
 
+For detailed setup instructions, refer to the [official Firebase Emulators documentation](https://firebase.google.com/docs/emulator-suite).
+
 ```bash
 # Start the emulators
 npm run serve
@@ -41,7 +43,7 @@ This will spin up:
 
 ## 🧪 Testing
 
-We use `mocha` and `chai` for unit and integration testing.
+This project uses `mocha` and `chai` for unit and integration testing.
 
 ```bash
 npm run test

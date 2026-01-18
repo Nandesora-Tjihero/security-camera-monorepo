@@ -60,6 +60,7 @@ This project is a Work In Progress (WIP) and more improvements will be continual
 ### Prerequisites
 
 - Node.js v18 or later
+- **Recommended**: [Firebase Emulators](https://firebase.google.com/docs/emulator-suite) for a complete local development environment (Functions, Firestore, etc.).
 - To run with your own credentials, create a [Firebase project](https://firebase.google.com/docs/android/setup#create-firebase-project) and get configuration data for your platforms(e.g web, iOS, Android). Then replace the demo values in the `.env.example` file and rename the file to `.env`.
 - A Stripe account for handling subscriptions and billing (you can use test mode for development), and the [Stripe CLI](https://stripe.com/docs/stripe-cli) installed.
 

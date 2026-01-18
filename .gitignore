@@ -5,5 +5,6 @@ apps/web/optimization_candidates.html
 apps/mobile/optimization_candidates.html
 apps/backend/OPTIMIZATION_CANDIDATES.html
 ISSUES_IMPORT_CANDIDATES.md
+EMULATOR_SETUP.md
 
 *.log
