@@ -5,7 +5,7 @@
     }
   ],
   "settings": {
-    "workbench.colorTheme": "Tokyo Night Light",
+    "workbench.colorTheme": "Default Dark+",
     "workbench.iconTheme": "vscode-icons",
     "window.title": "WEB Workspace"
   },

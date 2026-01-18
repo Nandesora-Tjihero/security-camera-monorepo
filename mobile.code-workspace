@@ -5,7 +5,7 @@
     }
   ],
   "settings": {
-    "workbench.colorTheme": "Solarized Dark",
+    "workbench.colorTheme": "Default Dark Modern",
     "workbench.iconTheme": "vscode-icons",
     "window.title": "MOBILE Workspace"
   },
