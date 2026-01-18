@@ -1,0 +1,34 @@
+
+
+# -------------------------------------------------------------------------
+# GUI Client Fix (e.g. GitHub Desktop):
+# GUIs often don't load the user's shell PATH.
+# We add common paths for Homebrew/Node to ensure 'npm' is found.
+# -------------------------------------------------------------------------
+export PATH="$PATH:/usr/local/bin:/opt/homebrew/bin"
+
+# Run tests for Web
+echo "🧪 [Husky] Running tests for apps/web..."
+cd apps/web
+if [ -f package.json ]; then
+  npm run test -- --run # use --run to make vitest run once and exit
+  if [ $? -ne 0 ]; then
+    echo "❌ apps/web tests failed"
+    exit 1
+  fi
+fi
+cd ../..
+
+# Run tests for Backend
+echo "🧪 [Husky] Running tests for apps/backend..."
+cd apps/backend
+if [ -f package.json ]; then
+  npm run test
+  if [ $? -ne 0 ]; then
+    echo "❌ apps/backend tests failed"
+    exit 1
+  fi
+fi
+cd ../..
+
+echo "✅ [Husky] All tests passed!"
