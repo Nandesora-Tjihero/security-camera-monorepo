@@ -8,3 +8,5 @@ ISSUES_IMPORT_CANDIDATES.md
 EMULATOR_SETUP.md
 
 *.log
+
+.agent/
