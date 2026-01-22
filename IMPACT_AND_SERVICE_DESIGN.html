@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Impact Measurement & Service Design</title>
+    <style>
+      :root {
+        --primary-color: #60a5fa; /* Lighter blue for contrast */
+        --secondary-color: #cbd5e1; /* Light gray for secondary text */
+        --bg-color: #0f172a; /* Deep dark blue/slate */
+        --card-bg: #1e293b; /* Dark card background */
+        --text-color: #f1f5f9; /* Near white text */
+        --accent-green: #34d399;
+        --accent-purple: #a78bfa;
+        --accent-orange: #fbbf24;
+        --accent-red: #f87171;
+      }
+
+      body {
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        line-height: 1.6;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4 {
+        color: var(--text-color);
+        margin-top: 1.5em;
+        margin-bottom: 0.5em;
+        font-weight: 700;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        text-align: center;
+        margin-bottom: 0.2em;
+      }
+      h2 {
+        font-size: 1.8rem;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 10px;
+        margin-top: 50px;
+      }
+      h3 {
+        font-size: 1.4rem;
+        color: var(--primary-color);
+        margin-top: 30px;
+      }
+      h4 {
+        font-size: 1.1rem;
+        color: var(--accent-orange);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .subtitle {
+        text-align: center;
+        font-size: 1.2rem;
+        color: var(--secondary-color);
+        margin-bottom: 50px;
+        font-style: italic;
+      }
+
+      p,
+      li {
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+      }
+
+      strong {
+        color: var(--text-color);
+        font-weight: 600;
+      }
+
+      em {
+        color: var(--accent-purple);
+        font-style: normal;
+      }
+
+      /* Tables */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: var(--card-bg);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      th {
+        background: rgba(0, 0, 0, 0.2);
+        color: var(--primary-color);
+        font-weight: 600;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      /* Cards for Personas and SLAs */
+      .card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 20px;
+        border-left: 4px solid var(--primary-color);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      .card.persona {
+        border-left-color: var(--accent-purple);
+      }
+      .card.sla {
+        border-left-color: var(--accent-green);
+      }
+
+      ul {
+        padding-left: 20px;
+      }
+      li {
+        margin-bottom: 5px;
+      }
+
+      blockquote {
+        background: rgba(255, 255, 255, 0.05);
+        border-left: 4px solid var(--accent-orange);
+        margin: 20px 0;
+        padding: 15px 20px;
+        border-radius: 0 8px 8px 0;
+        font-size: 1.1rem;
+        color: var(--text-color);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Impact Measurement & Service Design</h1>
+    <p class="subtitle">
+      Applying "Service Definition" principles to the Security Camera project.
+    </p>
+
+    <!-- ROLES & PERSONAS -->
+    <h2>1. Roles & Personas</h2>
+    <p><em>Moving beyond generic "Users" to understand specific needs.</em></p>
+
+    <div class="card persona">
+      <h3>Role: The Homeowner</h3>
+      <h4>Persona: "Sarah, the Budget-Conscious Parent"</h4>
+      <ul>
+        <li>
+          <strong>Description:</strong> Sarah has 2 kids and a drawer full of
+          old laptops. She wants to keep an eye on her front door when she's at
+          work but refuses to pay $300 for a Ring/Nest setup + monthly
+          subscription.
+        </li>
+        <li>
+          <strong>Motivations:</strong> Saving money, reusing waste, simplicity.
+        </li>
+        <li>
+          <strong>Pain Points:</strong> "I am not technical. If it requires
+          command line, I won't use it."
+        </li>
+        <li>
+          <strong>Impact on Design:</strong> The Web App must have a "One-Click
+          Setup" mode. Billing must offer a compelling "Free Tier".
+        </li>
+      </ul>
+    </div>
+
+    <div class="card persona">
+      <h3>Role: The Privacy Advocate</h3>
+      <h4>Persona: "David, the Tech-Savvy Skeptic"</h4>
+      <ul>
+        <li>
+          <strong>Description:</strong> David works in IT. He trusts open-source
+          software but distrusts big tech companies with video feeds inside his
+          home.
+        </li>
+        <li>
+          <strong>Motivations:</strong> Data sovereignty, local processing,
+          end-to-end encryption.
+        </li>
+        <li>
+          <strong>Pain Points:</strong> Sending raw video streams to the cloud.
+        </li>
+        <li>
+          <strong>Impact on Design:</strong> The "Local Object Detection"
+          feature is critical for him. Only <em>events</em> (snapshots) should
+          be uploaded, not full streams.
+        </li>
+      </ul>
+    </div>
+
+    <!-- BUSINESS REQUIREMENTS & KPIs -->
+    <h2>2. Business Requirements & KPIs</h2>
+    <p>
+      <em>Measuring the "Business Value" defined in BUSINESS_VALUE.html.</em>
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Objective</th>
+          <th>Key Performance Indicator (KPI)</th>
+          <th>Target</th>
+          <th>Rationale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Democratize Security</strong></td>
+          <td><strong>Active Device Reuse Rate</strong></td>
+          <td>> 10,000 devices/year</td>
+          <td>
+            Proves we are successfully diverting e-waste into security assets.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Trust & Reliability</strong></td>
+          <td><strong>False Positive Ratio</strong></td>
+          <td>< 5% of alerts</td>
+          <td>
+            If users get spam alerts (shadows/pets), they will disable
+            notifications.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>User Retention</strong></td>
+          <td><strong>"Day-30" Retention</strong></td>
+          <td>> 40%</td>
+          <td>
+            Measures if users actually keep the system running effectively over
+            time.
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Cost Efficiency</strong></td>
+          <td><strong>Cost Per Active User (CPAU)</strong></td>
+          <td>< $0.50 / month</td>
+          <td>
+            Essential for the "Free Tier" to be sustainable on Serverless
+            infrastructure.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- SLAs -->
+    <h2>3. Service Level Agreements (SLAs)</h2>
+    <p>
+      <em>Defining technical reliability using the Google SRE framework.</em>
+    </p>
+
+    <h3>Critical User Journey: The "Intruder Alert" Loop</h3>
+    <p>
+      <strong>Context:</strong> A person walks in front of the camera. The user
+      relies on knowing this <em>immediately</em>.
+    </p>
+
+    <div class="card sla">
+      <h4>SLA 1: Notification Latency</h4>
+      <ul>
+        <li>
+          <strong>Definition:</strong> The time duration from when the
+          <code>image</code> is successfully uploaded to Storage -> to when the
+          <code>FCM</code> notification request is acknowledged by the
+          notification service.
+        </li>
+        <li>
+          <strong>SLA Target:</strong> <strong>95%</strong> of notifications
+          dispatched within <strong>3 seconds</strong>.
+        </li>
+        <li>
+          <strong>Consequence of Failure:</strong> If alerts arrive 2 minutes
+          late, the intruder is already gone. The service is useless.
+        </li>
+      </ul>
+    </div>
+
+    <div class="card sla">
+      <h4>SLA 2: Detection Availability</h4>
+      <ul>
+        <li>
+          <strong>Definition:</strong> The percentage of valid camera frames
+          that successfully run through the TensorFlow.js model without crashing
+          the browser tab.
+        </li>
+        <li>
+          <strong>SLA Target:</strong> <strong>99.5%</strong> uptime per
+          24-hour active session.
+        </li>
+        <li>
+          <strong>Consequence of Failure:</strong> If the browser tab crashes
+          effectively "turning off" the camera, security is compromised.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Applying SMART Criteria -->
+    <h2>4. Applying SMART Criteria</h2>
+    <p><em>Refining a generic requirement into a measurable one.</em></p>
+
+    <p>
+      <strong>Original Requirement:</strong> "The system should send
+      notifications fast."
+    </p>
+
+    <p><strong>Refined to SMART:</strong></p>
+    <ul>
+      <li>
+        <strong>Specific:</strong> The Backend Function triggers on
+        <code>object.finalized</code> and sends a message via Firebase Cloud
+        Messaging.
+      </li>
+      <li>
+        <strong>Measurable:</strong> Reported via Google Cloud Trace logs with
+        specific timestamps.
+      </li>
+      <li>
+        <strong>Achievable:</strong> Serverless guarantees ensure cold-starts
+        are the only major latency factor (< 2s).
+      </li>
+      <li>
+        <strong>Relevant:</strong> Speed is the core value proposition of a
+        security camera.
+      </li>
+      <li>
+        <strong>Time-bound:</strong> "Within 3 seconds" (as defined in the SLA).
+      </li>
+    </ul>
+
+    <p><strong>Final Requirement Text:</strong></p>
+    <blockquote>
+      "The backend notification service must dispatch an alert to the user's
+      mobile device within 3 seconds of receiving an event snapshot, for 95% of
+      all events."
+    </blockquote>
+  </body>
+</html>
