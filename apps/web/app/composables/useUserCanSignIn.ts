@@ -1,4 +1,4 @@
-import { useUser } from '~~/layers/auth/app/composables/useUser';
+import { useUser } from "~~/layers/auth/app/composables/useUser";
 export const useUserCanSignIn = () => {
   const canSignIn = ref(false);
   const { user } = useUser();
@@ -12,7 +12,7 @@ export const useUserCanSignIn = () => {
       isCameraSupported &&
       !!model.value &&
       !user.value &&
-      useRoute().path !== '/auth';
+      useRoute().path !== "/auth";
 
     watchEffect(() => {
       const isCameraSupported = !!(
@@ -21,9 +21,9 @@ export const useUserCanSignIn = () => {
 
       canSignIn.value =
         isCameraSupported &&
-        !!model.value &&
+        // !!model.value &&
         !user.value &&
-        useRoute().path !== '/auth';
+        useRoute().path !== "/auth";
     });
   });
 
