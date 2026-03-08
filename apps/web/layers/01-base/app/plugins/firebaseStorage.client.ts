@@ -4,16 +4,16 @@ import {
   getDownloadURL,
   connectStorageEmulator,
   type FirebaseStorage,
-} from 'firebase/storage';
-import type { IStorageService } from '#shared/core/contracts';
+} from "firebase/storage";
+import type { IStorageService } from "#shared/core/contracts";
 
-const EMULATOR_HOST = '127.0.0.1';
+const EMULATOR_HOST = "127.0.0.1";
 const EMULATOR_PORT = 9199;
 
 function createFilePathRef(
   storageInstance: FirebaseStorage,
   userId: string,
-  fileName: string
+  fileName: string,
 ) {
   const path = `detectedPersons/${userId}/${fileName}`;
   return ref(storageInstance, path);
@@ -22,19 +22,20 @@ function createFilePathRef(
 export default defineNuxtPlugin(async (nuxtApp) => {
   const { storage } = nuxtApp.$firebase as { storage: FirebaseStorage };
 
-  if (import.meta.client && location.hostname === 'localhost') {
+  const config = useRuntimeConfig();
+  if (import.meta.client && config.public.useEmulators) {
     console.log(
-      `🔌 Connecting Storage to emulator: ${EMULATOR_HOST}:${EMULATOR_PORT} for project ${storage.app.options.projectId}`
+      `🔌 Connecting Storage to emulator: ${EMULATOR_HOST}:${EMULATOR_PORT} for project ${storage.app.options.projectId}`,
     );
     connectStorageEmulator(storage, EMULATOR_HOST, EMULATOR_PORT);
   }
 
-  const uploadImage: IStorageService['uploadImage'] = async (
+  const uploadImage: IStorageService["uploadImage"] = async (
     userId: string,
-    imageData: File
+    imageData: File,
   ) => {
     const fileBaseName = `detection_${Date.now()}`;
-    let uploadedFileLocation = '';
+    let uploadedFileLocation = "";
 
     try {
       const fileRef = createFilePathRef(storage, userId, fileBaseName);
@@ -43,7 +44,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
 
       uploadedFileLocation = uploadResult.ref.fullPath;
     } catch (error) {
-      console.error('❌ Error uploading image:', error);
+      console.error("❌ Error uploading image:", error);
 
       throw error;
     }
@@ -51,9 +52,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     return uploadedFileLocation;
   };
 
-  const getImageUrl: IStorageService['getImageUrl'] = async (
+  const getImageUrl: IStorageService["getImageUrl"] = async (
     userId: string,
-    imageName: string
+    imageName: string,
   ) => {
     const fileRef = createFilePathRef(storage, userId, imageName);
 
