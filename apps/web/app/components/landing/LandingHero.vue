@@ -37,9 +37,8 @@
   import { useSubscription } from '#layers/payment/app/composables/useSubscription';
   const { canSignIn } = useUserCanSignIn();
 
-  const { getButtonConfig, markFreeTrialSeen } = useSubscription();
+  const { buttonConfig, markFreeTrialSeen } = useSubscription();
 
-  const buttonConfig = getButtonConfig;
 
   const handleButtonClick = async () => {
     switch (buttonConfig.value.action) {
