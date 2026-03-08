@@ -1,29 +1,35 @@
 import {
   getDetectionService,
   getStorageService,
+  getDatabaseService,
 } from '~~/layers/01-base/app/utils/services';
 import type { DetectedObject } from '~~/shared/core/models';
 
-export function usePersonDetection() {
-  const mediaStream = ref<MediaStream | null>(null);
-  const webcamStream = ref<HTMLVideoElement | null>(null);
-  const isMonitoring = ref(false);
-  const webcamStreamReady = ref(false);
+// Hardware refs are kept at module level to act as singletons
+// across the app, while useState handles the reactive UI state.
+const mediaStream = ref<MediaStream | null>(null);
+const webcamStream = ref<HTMLVideoElement | null>(null);
+let isListenerAttached = false;
+let heartbeatInterval: any = null;
 
-  const { canMonitor, user } = useUser();
+export function usePersonDetection() {
+  const state = useDetectionState();
+  const { user } = useUser();
+  const detectionService = getDetectionService();
+  const storageService = getStorageService();
+  const databaseService = getDatabaseService();
 
   const handlePersonDetected = async (
-    detection: DetectedObject
+    detection: DetectedObject,
   ): Promise<void> => {
     try {
       const blob = await captureImageFromVideoAndBoundingBoxValues(
         detection.bbox,
-        webcamStream.value
+        webcamStream.value,
       );
 
       if (blob && user.value) {
         const imageUrl = await storageService.uploadImage(user.value.uid, blob);
-
         console.log(`Person detected! Image uploaded: ${imageUrl}`);
       }
     } catch (error) {
@@ -31,16 +37,16 @@ export function usePersonDetection() {
     }
   };
 
-  // Services
-  const detectionService = getDetectionService();
-
-  detectionService.onDetection(handlePersonDetected);
-
-  const storageService = getStorageService();
+  // Ensure we only attach the listener once for the singleton service
+  if (!isListenerAttached) {
+    detectionService.onDetection(handlePersonDetected);
+    isListenerAttached = true;
+  }
 
   const setupMonitoring = async () => {
+    if (mediaStream.value) return; // Already setup
+
     try {
-      // Setup webcam
       mediaStream.value = await navigator.mediaDevices.getUserMedia({
         video: true,
       });
@@ -49,33 +55,76 @@ export function usePersonDetection() {
     }
   };
 
+  let wakeLock: WakeLockSentinel | null = null;
+  const requestWakeLock = async () => {
+    try {
+      if ('wakeLock' in navigator) {
+        wakeLock = await navigator.wakeLock.request('screen');
+        console.log('Wake Lock is active 🛡️');
+      }
+    } catch (err: any) {
+      console.error(`${err?.name}, ${err?.message}`);
+    }
+  };
+
+  const startHeartbeat = () => {
+    if (heartbeatInterval) return;
+    heartbeatInterval = setInterval(async () => {
+      if (user.value) {
+        await databaseService.addDataToDocForUser('users', user.value.uid, {
+          lastActive: Date.now(),
+        });
+        console.log('Heartbeat sent ❤️');
+      }
+    }, 60000); // Every minute
+  };
+
+  const stopHeartbeat = () => {
+    if (heartbeatInterval) {
+      clearInterval(heartbeatInterval);
+      heartbeatInterval = null;
+    }
+  };
+
   const startMonitoring = async () => {
-    if (webcamStream.value && webcamStreamReady.value && user.value) {
+    if (webcamStream.value && state.webcamStreamReady.value && user.value) {
+      await requestWakeLock();
+      startHeartbeat();
       detectionService.startDetection(webcamStream.value);
       webcamStream.value.play();
-      isMonitoring.value = true;
+      state.isMonitoring.value = true;
     }
   };
 
   const stopMonitoring = async () => {
     detectionService.stopDetection();
-    isMonitoring.value = false;
+    state.isMonitoring.value = false;
     webcamStream.value?.pause();
+    stopHeartbeat();
+
+    if (wakeLock !== null) {
+      await wakeLock.release();
+      wakeLock = null;
+      console.log('Wake Lock released 🔓');
+    }
   };
 
   const handleLoadedData = () => {
-    webcamStreamReady.value = true;
+    state.webcamStreamReady.value = true;
   };
 
   onMounted(setupMonitoring);
 
+  onUnmounted(() => {
+    stopHeartbeat();
+  });
+
   return {
+    ...state,
     mediaStream,
     webcamStream,
-    isMonitoring,
     startMonitoring,
     stopMonitoring,
     handleLoadedData,
-    // handlePersonDetected,
   };
 }

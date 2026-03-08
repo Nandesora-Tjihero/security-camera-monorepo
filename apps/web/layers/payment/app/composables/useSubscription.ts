@@ -1,82 +1,84 @@
-import type { ButtonVariant } from '#ui/types';
+import type { ButtonProps } from '#ui/types';
 
 interface ButtonConfig {
   text: string;
   action: 'free-trial' | 'sign-in' | 'upgrade' | 'dashboard';
-  variant: ButtonVariant;
+  variant: ButtonProps['variant'];
 }
 
 export const useSubscription = () => {
-  const { user, subscription } = useUser();
-
-  const hasTriedFreeTrial = ref(false);
+  const { user } = useUser();
+  const state = useSubscriptionState();
 
   onMounted(() => {
-    // Check localStorage
     try {
       const hasTriedFreeTrialLocalStorage = localStorage.getItem(
-        'SCHasTriedFreeTrial'
+        'SCHasTriedFreeTrial',
       );
 
-      hasTriedFreeTrial.value = Boolean(hasTriedFreeTrialLocalStorage);
+      state.hasTriedFreeTrial.value = Boolean(hasTriedFreeTrialLocalStorage);
     } catch (error) {}
   });
 
   const markFreeTrialSeen = () => {
     localStorage.setItem('SCHasTriedFreeTrial', 'true');
+    state.hasTriedFreeTrial.value = true;
   };
 
   const hasActiveSubscription = computed(() => {
     return (
-      subscription.value?.status === 'active' ||
-      (subscription.value?.status === 'trialing' &&
+      state.subscription.value?.status === 'active' ||
+      (state.subscription.value?.status === 'trialing' &&
         !currentPeriodEndDateIsPast.value)
     );
   });
 
   const currentPeriodEndDateIsPast = computed(() => {
-    if (!subscription.value?.current_period_end) {
+    if (!state.subscription.value?.current_period_end) {
       return false;
     }
     const currentPeriodEnd = new Date(
-      subscription.value.current_period_end * 1000
+      state.subscription.value.current_period_end * 1000,
     );
     const now = new Date();
     return currentPeriodEnd < now;
   });
 
-  const getButtonConfig: ComputedRef<ButtonConfig> = computed(() => {
-    if (!user.value && hasTriedFreeTrial.value !== true) {
+  const buttonConfig: ComputedRef<ButtonConfig> = computed(() => {
+    if (user.value) {
+      if (hasActiveSubscription.value) {
+        return {
+          text: 'Ir al panel',
+          action: 'dashboard',
+          variant: 'solid',
+        };
+      }
       return {
-        text: 'Try for 14 days free',
-        action: 'free-trial',
-        variant: 'solid',
-      };
-    } else if (!user.value) {
-      return {
-        text: 'Sign In',
-        action: 'sign-in',
-        variant: 'solid',
-      };
-    } else if (user.value && !hasActiveSubscription.value) {
-      return {
-        text: 'Upgrade Now',
+        text: 'Mejorar ahora',
         action: 'upgrade',
         variant: 'solid',
       };
-    } else {
+    }
+
+    if (!state.hasTriedFreeTrial.value) {
       return {
-        text: 'Go to Dashboard',
-        action: 'dashboard',
+        text: 'Probar 14 días gratis',
+        action: 'free-trial',
         variant: 'solid',
       };
     }
+
+    return {
+      text: 'Iniciar sesión',
+      action: 'sign-in',
+      variant: 'solid',
+    };
   });
 
   return {
-    hasTriedFreeTrial: readonly(hasTriedFreeTrial),
-    getButtonConfig: readonly(getButtonConfig),
+    ...state,
+    buttonConfig,
     markFreeTrialSeen,
-    hasActiveSubscription: readonly(hasActiveSubscription),
+    hasActiveSubscription,
   };
 };
