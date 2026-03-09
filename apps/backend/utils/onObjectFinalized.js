@@ -39,9 +39,9 @@ exports.onDetectionImageUploaded = onObjectFinalized(
       }
 
       const userData = userSnap.data();
-      const token = userData?.tokens?.[userData.tokens.length - 1]; // Get the latest token
-      if (!token) {
-        console.warn(`No FCM token for user ${userId}`);
+      const tokens = userData?.tokens || [];
+      if (tokens.length === 0) {
+        console.warn(`No FCM tokens for user ${userId}`);
         return;
       }
 
@@ -59,7 +59,7 @@ exports.onDetectionImageUploaded = onObjectFinalized(
 
       await Promise.all([
         detectionsRef.doc(fileName).set(detectionData),
-        sendPushNotification(token, imageUrl), // notify device
+        sendPushNotifications(tokens, imageUrl), // notify all devices
       ]);
 
       // PERFORMANCE MEASUREMENT: Notification Latency
@@ -84,7 +84,7 @@ exports.onDetectionImageUploaded = onObjectFinalized(
       );
 
       console.log(
-        `✅ Image URL saved and notification sent for ${userId} (Latency: ${latencyMs}ms)`,
+        `✅ Image URL saved and notifications sent for ${userId} to ${tokens.length} devices (Latency: ${latencyMs}ms)`,
       );
     } catch (err) {
       console.error("🔥 Error handling upload:", err);
@@ -104,9 +104,9 @@ exports.onDetectionImageUploaded = onObjectFinalized(
   },
 );
 
-async function sendPushNotification(token, imageUrl) {
-  const payload = {
-    token,
+async function sendPushNotifications(tokens, imageUrl) {
+  const message = {
+    tokens,
     notification: {
       title: "Motion detected!",
       body: "Tap to view the image.",
@@ -120,12 +120,12 @@ async function sendPushNotification(token, imageUrl) {
   };
 
   try {
-    const response = await messaging.send(payload);
-    console.log("✅ Push notification sent:", response);
+    const response = await messaging.sendEachForMulticast(message);
+    console.log(`✅ Push notifications sent: ${response.successCount} successful, ${response.failureCount} failed`);
     return response;
   } catch (error) {
-    console.error("❌ Error sending push notification:", error);
-    throw error; // Re-throw to ensure the main function knows it failed
+    console.error("❌ Error sending push notifications:", error);
+    throw error;
   }
 }
 

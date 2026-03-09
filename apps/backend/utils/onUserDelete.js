@@ -1,3 +1,4 @@
+// TODO: ensure this function works
 const functions = require('firebase-functions');
 const { db } = require('../firebase');
 
