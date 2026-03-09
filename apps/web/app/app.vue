@@ -19,22 +19,11 @@
       </template>
 
       <template #body>
-        <div class="flex flex-col justify-between h-full">
-          <div>
-            <div class="mb-2">
-              <span
-                class="text-[11px] font-bold text-gray-500 uppercase tracking-widest"
-                >Account Settings</span
-              >
-            </div>
-            <UNavigationMenu
-              :items="user ? options : []"
-              orientation="vertical"
-              class="-mx-2.5"
-            />
-          </div>
-          <div></div>
-        </div>
+        <AppHeaderAuthenticated
+          v-if="user"
+          @close="() => {}"
+        />
+        <AppHeaderGuest v-else />
       </template>
     </UHeader>
 
@@ -92,39 +81,9 @@
   // import { loadModel } from '~~/layers/detection/app/utils/tfjs';
   // loadModel(); removed for lazy loading
 
-  import { getAuthService } from '~~/layers/01-base/app/utils/services';
-
-  const { clearUser, setSubscription, user } = useUser();
-  const emits = defineEmits(['close']);
-
-  const signOut = async () => {
-    try {
-      await getAuthService().signOut();
-      emits('close');
-      clearUser();
-      setSubscription(null);
-      await fetch('/api/session-logout', { method: 'POST' });
-      // useState("user", () => null); why does it cause weird behavior on signin again?
-      await navigateTo('/');
-    } catch (error) {
-      console.error('Error signing out', error);
-    }
-  };
+  const { user } = useUser();
 
   import type { NavigationMenuItem } from '@nuxt/ui';
-
-  const options = computed<NavigationMenuItem[]>(() => [
-    {
-      icon: 'i-heroicons-credit-card',
-      label: 'Billing',
-      click: () => navigateTo('/subscriptions'),
-    },
-    {
-      icon: 'i-heroicons-arrow-right-start-on-rectangle',
-      label: 'Sign Out',
-      onSelect: signOut,
-    },
-  ]);
 
   const items: NavigationMenuItem[] = [
     {
@@ -143,6 +102,7 @@
       target: '_blank',
     },
   ];
+
 
   useHead({
     title: 'Security Camera',

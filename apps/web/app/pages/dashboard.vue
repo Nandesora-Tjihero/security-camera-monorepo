@@ -25,7 +25,7 @@
   //   middleware: ['auth'],
   // });
 
-  const { subscription, setSubscription, user } = useUser();
+  // const { subscription, setSubscription, user } = useUser();
 
   const { hasActiveSubscription } = useSubscription();
 
@@ -35,9 +35,9 @@
 
   const databaseService = getDatabaseService();
   onMounted(async () => {
-    if (user.value) {
-      const sub = await databaseService.getSubscription(user.value?.uid);
-      setSubscription(sub);
-    }
+    // if (user.value) {
+    //   const sub = await databaseService.getSubscription(user.value?.uid);
+    //   setSubscription(sub);
+    // }
   });
 </script>

@@ -11,7 +11,7 @@
     >
       <UButton
         class="bg-primary-500! text-white"
-        color="white"
+        color="primary"
         :label="user.displayName as string || user.email as string"
         trailing-icon="i-heroicons-chevron-down-20-solid"
       />
@@ -20,11 +20,11 @@
       <BaseLoadingIndicator v-if="loadingModel && !canSignIn" />
     </ClientOnly>
 
-    <ULink
+    <UButton
       v-if="canSignIn"
       @click.prevent="goToLogin"
       class="text-highlighted"
-      >Sign In</ULink
+      >Sign In</UButton
     >
   </div>
 </template>
