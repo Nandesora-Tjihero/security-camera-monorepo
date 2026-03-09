@@ -54,22 +54,24 @@
   const resetError = (error: any) => {
     error.value = null;
   };
-
-  onMounted(async () => {
-    // Prefetch the model when the user visits the auth page.
-    // This ensures we don't slow down the landing page, but have it ready
-    // for the user when they eventually access the camera.
-    // If it fails here, we can catch it, or let the actual detection service handle it later.
-    try {
+useAsyncData('loadModel', async () => {
+  try {
       console.log('Prefetching AI Model...');
       await loadModel();
       console.log('AI Model Prefetched successfully');
     } catch (e) {
       console.warn('AI Model prefetch failed - will retry on camera start', e);
     }
+});
+  onMounted(async () => {
+    // Prefetch the model when the user visits the auth page.
+    // This ensures we don't slow down the landing page, but have it ready
+    // for the user when they eventually access the camera.
+    // If it fails here, we can catch it, or let the actual detection service handle it later.
+    
   });
   watch(
-    () => user.value,
+    user,
     async (newUser) => {
       if (newUser) {
         const sub = await databaseService.getSubscription(newUser.uid);
@@ -95,7 +97,7 @@
   );
 
   watch(
-    () => subscription.value,
+    subscription,
     async (newSubscription) => {
       if (newSubscription && user.value) {
         // Mark that the user has used their free trial
