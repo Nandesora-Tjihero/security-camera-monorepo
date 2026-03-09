@@ -2,6 +2,8 @@
 
 ## 1. Executive Summary
 
+**See also:** [Impact & Service Design](./IMPACT_AND_SERVICE_DESIGN.md) for Personas, KPIs, and SLA definitions.
+
 The goal of this project is to democratize home security by transforming existing devices (laptops, old phones) into intelligent security cameras using web technologies. The system utilizes edge computing (browser-based AI) to detect intruders and leverages serverless cloud infrastructure for reliable storage and notifications.
 
 ## 2. User Stories
@@ -42,7 +44,7 @@ The goal of this project is to democratize home security by transforming existin
 ### 4.1. Architecture
 
 - **Pattern**: Event-Driven Serverless Architecture.
-- **Frontend**: Nuxt 3 (Vue 3) SPA for the camera interface.
+- **Frontend**: Nuxt 4 (Vue 3) SPA for the camera interface.
 - **Backend**: Firebase Cloud Functions v2 for event handling.
 - **Database**: Firestore for user metadata and event logs.
 - **Storage**: Cloud Storage for Firebase for event snapshots.

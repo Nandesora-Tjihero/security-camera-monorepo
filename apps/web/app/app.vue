@@ -89,8 +89,8 @@
   </UApp>
 </template>
 <script setup lang="ts">
-  import { loadModel } from '~~/layers/detection/app/utils/tfjs';
-  loadModel();
+  // import { loadModel } from '~~/layers/detection/app/utils/tfjs';
+  // loadModel(); removed for lazy loading
 
   import { getAuthService } from '~~/layers/01-base/app/utils/services';
 
