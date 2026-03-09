@@ -1,10 +1,10 @@
-import { toRaw } from "vue";
+import { toRaw } from 'vue';
 
 import type {
   DetectedObject,
   ObjectDetection,
-} from "@tensorflow-models/coco-ssd";
-import type { IDetectionService } from "#shared/core/contracts";
+} from '@tensorflow-models/coco-ssd';
+import type { IDetectionService } from '#shared/core/contracts';
 
 export const model = shallowRef<ObjectDetection | null>(null);
 export const loadingModel = ref<boolean>(false);
@@ -13,19 +13,20 @@ export async function loadModel() {
   try {
     if (!model.value) {
       loadingModel.value = true;
-
+      console.time('loadModel');
       // Dynamic imports for lazy loading
       // These will only download when loadModel is called
-      await import("@tensorflow/tfjs-backend-cpu");
-      await import("@tensorflow/tfjs-backend-webgl");
-      const { load } = await import("@tensorflow-models/coco-ssd");
+      await import('@tensorflow/tfjs-backend-cpu');
+      await import('@tensorflow/tfjs-backend-webgl');
+      const { load } = await import('@tensorflow-models/coco-ssd');
 
       model.value = await load();
     }
+    console.timeEnd('loadModel');
     return model;
   } catch (error: any) {
     throw createError({
-      name: "ML Model Availability Check",
+      name: 'ML Model Availability Check',
       message: error instanceof Error ? error.message : String(error),
     });
   } finally {
@@ -75,14 +76,14 @@ export function getTfjsDetector(
     const currentModel = modelLoader.get();
 
     if (!currentModel) {
-      throw new Error("Model failed to load");
+      throw new Error('Model failed to load');
     }
 
     try {
       const rawModel = toRaw(currentModel);
 
       const now = Date.now();
-      console.log("Now timestamp:", now);
+      console.log('Now timestamp:', now);
       if (now - lastDetectionTimestamp < detectionCooldownMs) {
         // Still in cooldown period
         requestAnimationFrameId = scheduler.request(() =>
@@ -98,8 +99,8 @@ export function getTfjsDetector(
         // PERFORMANCE MEASUREMENT: Detection Availability (Success)
         console.debug(
           JSON.stringify({
-            metric: "detection_availability",
-            status: "success",
+            metric: 'detection_availability',
+            status: 'success',
             timestamp: Date.now(),
           }),
         );
@@ -107,7 +108,7 @@ export function getTfjsDetector(
         if (detectionCallback && detectedObjects.length > 0) {
           for (const detection of detectedObjects) {
             if (
-              detection.class === "person" &&
+              detection.class === 'person' &&
               detection.score > confidenceThreshold
             ) {
               detectionCallback(detection);
@@ -118,8 +119,8 @@ export function getTfjsDetector(
         // PERFORMANCE MEASUREMENT: Detection Availability (Failure)
         console.error(
           JSON.stringify({
-            metric: "detection_availability",
-            status: "error",
+            metric: 'detection_availability',
+            status: 'error',
             error: detectError,
             timestamp: Date.now(),
           }),
@@ -129,12 +130,12 @@ export function getTfjsDetector(
 
       requestAnimationFrameId = scheduler.request(() => startDetection(video));
     } catch (error) {
-      console.error("Error in startDetection", error);
+      console.error('Error in startDetection', error);
       // If the loop crashes completely, that's a critical availability failure
       console.error(
         JSON.stringify({
-          metric: "detection_availability",
-          status: "CRITICAL_CRASH",
+          metric: 'detection_availability',
+          status: 'CRITICAL_CRASH',
           timestamp: Date.now(),
         }),
       );
